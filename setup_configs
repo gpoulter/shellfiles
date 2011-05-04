@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# Configure main config files to reference these ones
+
+[[ ! -f ~/.bashrc ]] && echo 'source ~/.conf/bashrc' > ~/.bashrc
+[[ ! -f ~/.tmux.conf ]] && echo 'source-file ~/.conf/tmux.conf' > ~/.tmux.conf
+[[ ! -f ~/.screenrc ]] && echo 'source ~/.conf/screenrc' > ~/.screenrc
+[[ ! -f ~/.inputrc ]] && echo '$include ~/.conf/inputrc' > ~/.inputrc
+[[ ! -f ~/.vimrc ]] && echo 'source ~/.conf/vimrc' > /.vimrc
