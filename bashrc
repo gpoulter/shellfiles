@@ -22,7 +22,7 @@ source $CONF/modules/lessconf
 source $CONF/modules/prompt
 
 ## Set the prompt color
-prompt_colorator `ansifg green` `ansifg green` `ansifg blue`
+prompt_colorator `ansifg green` `ansifg magenta` `ansifg blue`
 
 ## Custom config file locations
 export WGETRC="$CONF/wgetrc"
