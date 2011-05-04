@@ -1,0 +1,41 @@
+[[ $(uname) == CYGWIN_NT* ]] || return
+
+########################################################
+## killall replacement
+
+function killall {
+  [ -z "$1" ] && return 
+  ps -ea | grep $1 | gawk '$1 ~ /^[^SI]/ { system("kill -9 " $1); }'
+}
+
+########################################################
+## Share SSH agent between shells
+
+SSH_ENV="$HOME/.ssh/environment"
+
+# Function to start ssh-agent and save the envars
+function start_agent {
+     /usr/bin/ssh-agent | sed 's/^echo/#echo/' > "${SSH_ENV}"
+     chmod 600 "${SSH_ENV}"
+     . "${SSH_ENV}" > /dev/null
+}
+
+# Source SSH settings, if applicable
+if [ -f "${SSH_ENV}" ]; then
+     . "${SSH_ENV}" > /dev/null
+     #Note ps ${SSH_AGENT_PID} does not work under cywgin
+     ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
+         start_agent;
+     }
+else
+     start_agent;
+fi 
+	
+########################################################
+## For shell started from explorer context menu
+
+# Explorer "Cygwin shell here"
+if [[ -f /start_here ]]; then
+    cd "$(cat /start_here)" 
+    rm -f /start_here
+fi
