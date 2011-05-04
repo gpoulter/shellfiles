@@ -145,7 +145,7 @@ nmap <Backspace> <c-b>
 " Python setup
 if !exists("autocommands_loaded")
   let autocommands_loaded = 1
-  autocmd BufRead,BufNewFile,FileReadPost *.py source ~/.vim/python
+  autocmd BufRead,BufNewFile,FileReadPost *.py source ~/.conf/vimpython
 endif
 
 " Remember last edit position
