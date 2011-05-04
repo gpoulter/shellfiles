@@ -1,0 +1,62 @@
+#############################################
+# Behaviours
+#############################################
+
+# don't "log in" new windows by default
+deflogin off
+# Whether to autodetach on hangup
+autodetach on
+# Enable non-blocking mode to better cope with flaky ssh connections.
+defnonblock 5
+
+#############################################
+# Appearance
+#############################################
+
+# don't use visual bell
+vbell off
+vbell_msg "Ding!"
+# don't show startup message
+startup_message off
+# logout message
+pow_detach_msg "Screen session of \$LOGNAME \$:cr:\$:nl:ended."
+# turn sending of screen messages to hardstatus off
+hardstatus off
+# lots of scrollback lines
+defscrollback 8192
+# set caption with date|load|windows
+caption always "%{Yb} %D %Y-%02m-%02d %0c %{k}|%{G} %l %{k}|%{W} %-w%{G}%n %t%{W}%+w"
+
+#############################################
+# Convenience Bindings
+#############################################
+
+# Use ctrl-O for escape (default ctrl-A)
+#escape ^Oo
+# User ` (grave) for escape
+escape ``
+
+# Resizing bindings for split screen
+bind = resize =
+bind + resize +1
+bind - resize -1
+bind _ resize max
+
+#############################################
+# Safety Bindings
+#############################################
+
+# Get rid of dangerous keybindings
+bind .   # was write termcap
+bind ^\  # was killall (and) quit
+bind ^k  # was kill
+bind k   # was kill
+bind x   # was lockscreen
+bind ^X  # was lockscreen
+
+# Make them better
+bind K kill
+bind I login on
+bind O login off
+bind \\ quit
+
