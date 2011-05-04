@@ -10,14 +10,14 @@
 
 ## Load interactive definitions
 
-DIR="$(basename $0)"
-source $DIR/pathmunge
-source $DIR/cygwin
-source $DIR/commands
-source $DIR/history
-source $DIR/listing
-source $DIR/prompt
-source $DIR/promptcolor
+MOD="$(readlink -f $0)/modules"
+source $MOD/pathmunge
+source $MOD/cygwin
+source $MOD/commands
+source $MOD/history
+source $MOD/listing
+source $MOD/prompt
+source $MOD/promptcolor
 
 ## Set the prompt color
 prompt_colorator `ansifg green` `ansifg green` `ansifg blue`
