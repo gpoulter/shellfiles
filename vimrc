@@ -130,7 +130,7 @@ imap <F6> <c-o>:w<cr>
 map <c-s> :w<cr>
 
 " Toggle paste
-set pastetoggle=<F6>
+set pastetoggle=<F7>
 
 " For editing long lines
 map <F8> :set tw=30000<cr>
