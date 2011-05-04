@@ -12,7 +12,7 @@
 
 ## Load interactive definitions
 
-CONF="$(dirname $(readlink -f $BASH_SOURCE))"
+export CONF="$(dirname $(readlink -f $BASH_SOURCE))"
 source $CONF/modules/pathmunge
 source $CONF/modules/cygwin
 source $CONF/modules/commands
