@@ -1,9 +1,10 @@
 ;; Load custom emacs configurations
-
 ;; custom-set-variables is in custom-init -- remove from .emacs
-;; Add these two lines to .emacs:
-; (setq load-path (cons "~/.conf/emacs" load-path))
-; (load "config-loader" t)
+
+;; Add these lines to .emacs:
+;(add-to-list 'load-path user-emacs-directory)
+;(add-to-list 'load-path "~/.conf/emacs/")
+;(load "config-loader" t)
 
 
 (if (eq window-system 'w32) 
