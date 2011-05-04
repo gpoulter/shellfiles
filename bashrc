@@ -12,21 +12,21 @@
 
 ## Load interactive definitions
 
-MOD="$(dirname $(readlink -f $BASH_SOURCE))/modules"
-source $MOD/pathmunge
-source $MOD/cygwin
-source $MOD/commands
-source $MOD/histconf
-source $MOD/lsconf
-source $MOD/lessconf
-source $MOD/prompt
+CONF="$(dirname $(readlink -f $BASH_SOURCE))"
+source $CONF/modules/pathmunge
+source $CONF/modules/cygwin
+source $CONF/modules/commands
+source $CONF/modules/histconf
+source $CONF/modules/lsconf
+source $CONF/modules/lessconf
+source $CONF/modules/prompt
 
 ## Set the prompt color
 prompt_colorator `ansifg green` `ansifg green` `ansifg blue`
 
 ## Custom config file locations
-export WGETRC="$MOD/wgetrc"
-export PYTHONSTARTUP="$MOD/pythonrc.py"
+export WGETRC="$CONF/wgetrc"
+export PYTHONSTARTUP="$CONF/pythonrc.py"
 
 ## Local configuration
 [[ -f ~/.bash_aliases ]] && source ~/.bash_aliases
