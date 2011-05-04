@@ -1,3 +1,5 @@
+# Get this config using source ~/.conf/bashrc
+
 ## Load system-wide definitions
 [[ -f /etc/bashrc ]] && source /etc/bashrc
 [[ -f /etc/bash.bashrc ]] && source /etc/bash.bashrc

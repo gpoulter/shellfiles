@@ -1,3 +1,5 @@
+# Get this config using PYTHONSTARTUP variable
+
 import sys, os, string, time
 
 try:
