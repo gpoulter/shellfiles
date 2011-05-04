@@ -17,7 +17,7 @@ function ansifg {
 ## Prompt itself is user@host:/path$ or host:/path#
 function prompt_colorator {
   # Example for green user and host, blue path
-  #export PS1="\[\033[01;32m\]\u@\h:\[\033[01;34m\]\w\[\033[00m\]\\$ "
+  #PS1="\[\033[01;32m\]\u@\h:\[\033[01;34m\]\w\[\033[00m\]\\$ "
   local usr=""
   local extra=""
   [[ "$(id -u)" != 0 ]] && usr="\u@"

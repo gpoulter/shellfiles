@@ -14,11 +14,6 @@ alias ...="cd ../.."
 alias ....="cd ../../.."
 alias -- -="cd -"
 
-## Other aliases
-alias le='less -R' # interpret ascii codes
-alias v='less -R'  # shorter than even 'le'
-alias psx='ps hwwaxfo pid,uname,nice,bsdstart,bsdtime,pcpu,pmem,rss,cmd'
-
 ## Directory listing colours
 if [[ -f "$(type -p dircolors)" ]]; then
     if [[ -f "~/.dircolors" ]]; then
@@ -43,26 +38,4 @@ function colorpreview {
    ) | tr : '\n' |
    sed 's/\([^=]*\)=\(.*\)/\x1b[\2m\1\x1b[0m\t\2/'
 }
-
-## Python interpreter customisation
-if [[ -f "$HOME/.pythonrc.py" ]]; then
-  export PYTHONSTARTUP="$HOME/.pythonrc.py"
-fi
-
-## Pager options
-export PAGER=less
-export LESS='--LONG-PROMPT --RAW-CONTROL-CHARS'
-
-## Use default lesspipe if available, else custom
-if [[ -x "/usr/bin/lesspipe" ]]; then
-    eval "$(/usr/bin/lesspipe)"
-elif [[ -x "/usr/bin/lesspipe.sh" ]]; then
-    eval "$(/usr/bin/lesspipe.sh)"
-elif [[ -x "$HOME/.lesspipe.sh" ]]; then
-    export LESSOPEN="|$HOME/.lesspipe.sh %s"
-    # For cygwin, escape any spaces in LESSOPEN
-    if [[ "$(uname)" == *CYGWIN* ]]; then
-        export LESSOPEN="|$(echo $HOME|sed 's/\ /\\\ /g')/.lesspipe.sh %s"
-    fi
-fi
 

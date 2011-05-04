@@ -1,0 +1,29 @@
+$if Bash
+
+    # history auto-expansion on space
+    Space:magic-space
+
+    # up/down will also search history
+    "\e[A":history-search-backward
+    "\e[B":history-search-forward
+    M-t:kill-word
+
+    # don't complete hidden files
+    set match-hidden-files off
+
+    # don't page long completion lists
+    set page-completions off
+
+    # only ask me about showing really long lists
+    set completion-query-items 500
+
+    # don't beep on ambiguity 
+    set show-all-if-ambiguous on
+
+    # yay - ignore case in completion
+    set completion-ignore-case On
+
+    # turn off the bell
+    set bell-style none
+
+$endif

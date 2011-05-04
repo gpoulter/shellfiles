@@ -111,15 +111,6 @@ function catemall {
     find "$TOP" -xdev -name '.bzr' -prune -o -name "$FNAME" -printf "\n## %p (%s) [%t]\n" -exec $catcmd {} \;
 }
 
-## Less with syntax highlighting
-if [[ -x "$(type -p source-highlight)" ]]; then
-    function hless() {
-        INFILE="$1"; shift
-        source-highlight --out-format=esc --style-file=$HOME/.esc.style --output=STDOUT --input="$INFILE" "$@" | less -R;
-    }
-    alias hl=hless
-fi
-
 ## Import SSH agent environment into existing screen session
 if [[ -x "$(type -p screen)" ]]; then
     function grabssh {
@@ -144,28 +135,22 @@ function geoip {
 }
 
 ## Quote URL parameters using Python
-function urlquote {
-    python -c "import urllib; print urllib.quote_plus(\"$*\")"
-}
+function urlquote { python -c "import urllib; print urllib.quote_plus(\"$*\")"; }
 
 ## Quote URL parameters using Python
-function urlunquote {
-    python -c "import urllib; print urllib.unquote_plus(\"$*\")"
-}
+function urlunquote { python -c "import urllib; print urllib.unquote_plus(\"$*\")"; }
 
 ## Learn what the commands are in a directory
-function learn {
-    ls $1 | xargs whatis | grep -v nothing | less
-}
+function learn { ls $1 | xargs whatis | grep -v nothing | less; }
 
-## See what services are running here
-function whatsopen {
-    sudo nmap -sS -O 127.0.0.1
-}
+## What services are running here
+#function whatsopen { sudo nmap -sS -O 127.0.0.1 }
 
-# Prints out the number of non-blank lines in the given files, with
-# whitespace and wc counts afterwards
+# Prints out the number of non-blank lines in the given files, with whitespace and wc counts 
 function gsloc {
     cat $* | awk 'BEGIN { count = 0; space = 0; } { if(match($0,"[0-9a-zA-z]+")) { count++; } else { space++; } } END { printf("\nSLOC:  %d\nSPACE: %d\n\n",count,space); }'
     wc $*
 }
+
+function psx { ps hwwaxfo "pid,uname,nice,bsdstart,bsdtime,pcpu,pmem,rss,cmd"; }
+
