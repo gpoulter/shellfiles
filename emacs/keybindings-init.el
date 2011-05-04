@@ -1,4 +1,4 @@
-(provide 'bindings-init)
+(provide 'keybindings-init)
 
 ;; Linux bindings of some EmacsW32 features
 (if (not (eq window-system 'w32)) (progn
