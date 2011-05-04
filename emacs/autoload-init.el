@@ -1,6 +1,6 @@
 (provide 'autoload-init)
 
-;; nXML on Linux (EmacsW32 enables nxml by default)
+;; nXML on Linux (already enabled in EmacsW32)
 (if (not (eq window-system 'w32)) (progn
   (if (load "rng-auto" t)
     (autoload 'nxml-mode "nxml-mode" "Load nxml-mode")
@@ -14,8 +14,6 @@
 ;; CSS
 (autoload 'css-mode "css-mode-simple" "Load css-mode")
 (add-to-list 'auto-mode-alist '("\\.css$" . css-mode))
-
-;; Go Language
 
 ;; JavaScript
 (autoload 'javascript-mode "javascript" "Load javascript-mode" t)
