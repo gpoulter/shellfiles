@@ -6,4 +6,4 @@
 [[ ! -f ~/.tmux.conf ]] && echo 'source-file ~/.conf/tmux.conf' > ~/.tmux.conf
 [[ ! -f ~/.screenrc ]] && echo 'source ~/.conf/screenrc' > ~/.screenrc
 [[ ! -f ~/.inputrc ]] && echo '$include ~/.conf/inputrc' > ~/.inputrc
-[[ ! -f ~/.vimrc ]] && echo 'source ~/.conf/vimrc' > /.vimrc
+[[ ! -f ~/.vimrc ]] && echo 'source ~/.conf/vimrc' > ~/.vimrc
