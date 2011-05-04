@@ -1,12 +1,12 @@
 ## ls aliases
-alias l='ls -l'      # long listing
-alias ll='ls -lhvrt'     # long listing
-alias l.='ls -ld .*' # dotfiles only
-alias l1='ls -1'     # one file per line
-alias la='ls -la'    # list all files
-alias lr='ls -R'     # recursive listing
-alias lR='ls -laR'   # all-inclusive recurse
-alias lld='ls -lUd */' # list directories
+alias l='ls -lF'       # long listing
+alias la='ls -alF'     # list all files
+alias lt='ls -lhvrtF'  # long listing by reverse time
+alias l.='ls -ld .*'   # dotfiles only
+alias l1='ls -1F'      # one file per line
+alias lr='ls -R'       # recursive listing
+alias lR='ls -alR'     # all-inclusive recurse
+alias lld='ls -dlU */' # list directories
 
 ## Up-directory aliases
 alias ..="cd .."
