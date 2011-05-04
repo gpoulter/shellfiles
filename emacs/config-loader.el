@@ -4,15 +4,8 @@
     (require 'windows-init))
 
 (require 'bindings-init)
-
 (require 'functions-init)
-
-(require 'modes-init)
-
+(require 'autoload-init)
 (require 'ergoemacs-init)
-
-;(require 'go-mode-load)
-
-;(require 'orgmode-init)
-
-;(require 'dark-face)
+(require 'orgmode-init)
+(require 'custom-init)

@@ -1,4 +1,4 @@
-(provide 'modes-init)
+(provide 'autoload-init)
 
 ;; nXML on Linux (EmacsW32 enables nxml by default)
 (if (not (eq window-system 'w32)) (progn
