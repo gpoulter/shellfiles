@@ -2,7 +2,7 @@
 
 # Configure main config files to reference these ones
 
-[[ ! -f ~/.bashrc ]] && echo 'source ~/.conf/bashrc' > ~/.bashrc
+[[ ! -f ~/.bash_aliases ]] && echo 'source ~/.conf/bashrc' > ~/.bash_aliases
 [[ ! -f ~/.tmux.conf ]] && echo 'source-file ~/.conf/tmux.conf' > ~/.tmux.conf
 [[ ! -f ~/.screenrc ]] && echo 'source ~/.conf/screenrc' > ~/.screenrc
 [[ ! -f ~/.inputrc ]] && echo '$include ~/.conf/inputrc' > ~/.inputrc
