@@ -1,9 +1,20 @@
 #!/bin/bash
 
 # Configure main config files to reference these ones
+declare -A configs
+configs['.bash_aliases']='source ~/.conf/bashrc'
+configs['.tmux.conf']='source-file ~/.conf/tmux.conf'
+configs['.screenrc']='source ~/.conf/screenrc'
+configs['.inputrc']='$include ~/.conf/inputrc'
+configs['.vimrc']='source ~/.conf/vimrc'
 
-[[ ! -f ~/.bash_aliases ]] && echo 'source ~/.conf/bashrc' > ~/.bash_aliases
-[[ ! -f ~/.tmux.conf ]] && echo 'source-file ~/.conf/tmux.conf' > ~/.tmux.conf
-[[ ! -f ~/.screenrc ]] && echo 'source ~/.conf/screenrc' > ~/.screenrc
-[[ ! -f ~/.inputrc ]] && echo '$include ~/.conf/inputrc' > ~/.inputrc
-[[ ! -f ~/.vimrc ]] && echo 'source ~/.conf/vimrc' > ~/.vimrc
+# Insert the includes on line 1 of the file
+for file in "${!configs[@]}"; do
+    val=${configs["$file"]}
+    if ! $(grep -q "$val" ~/$file); then
+        sed -i "1i $val" ~/$file
+    fi
+done
+
+# Copy over files that support neither environment nor inclusion
+cp nanorc ~/.nanorc
