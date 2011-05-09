@@ -1,14 +1,14 @@
 # Get this config using source ~/.conf/bashrc
 
-## Load system-wide definitions
-[[ -f /etc/bashrc ]] && source /etc/bashrc
-[[ -f /etc/bash.bashrc ]] && source /etc/bash.bashrc
-
-## Stop here for non-interactive shells
+## Stop for non-interactive shells
 [[ $- == *i* ]] || return 0
 
+## Load system-wide definitions
+#[[ -f /etc/bashrc ]] && source /etc/bashrc
+#[[ -f /etc/bash.bashrc ]] && source /etc/bash.bashrc
+
 ## Load system-wide completions
-[[ -f /etc/bash_completion ]] && source /etc/bash_completion
+#[[ -f /etc/bash_completion ]] && source /etc/bash_completion
 
 ## Load interactive definitions
 
@@ -22,11 +22,11 @@ source $CONF/modules/lessconf
 source $CONF/modules/prompt
 
 ## Set the prompt color
-prompt_colorator `ansifg green` `ansifg magenta` `ansifg blue`
+#prompt_colorator `ansifg green` `ansifg magenta` `ansifg blue`
 
-## Custom config file locations
+## Customise config file locations
 export WGETRC="$CONF/wgetrc"
 export PYTHONSTARTUP="$CONF/pythonrc.py"
 
 ## Local configuration
-[[ -f ~/.bash_aliases ]] && source ~/.bash_aliases
+#[[ -f ~/.bash_aliases ]] && source ~/.bash_aliases

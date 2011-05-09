@@ -27,16 +27,6 @@ function cmdfu { curl "http://www.commandlinefu.com/commands/matching/$@/$(echo 
 ## Search Google for $@
 function google { curl -A Mozilla http://www.google.com/search?q=$@ |html2text -width 80; }
 
-## Get unread Gmail
-function gmail {
-    curl -u graham.poulter --silent "https://mail.google.com/mail/feed/atom" | perl -ne 'print "\t" if /<name>/; print "$2\n" if /<(title|name)>(.*)<\/\1>/;';
-}
-
-# Write a GMail
-function gmail_to {
-    swiftfox -remote "openurl(https://mail.google.com/mail?view=cm&tf=0&to=`echo $1 | sed 's/mailto://'`,new-tab)"
-}
-
 ## Colourful 'grep' for $@
 function cgrep {
     grep --line-number --color=always "$@" | less -R;
@@ -144,7 +134,7 @@ function urlunquote { python -c "import urllib; print urllib.unquote_plus(\"$*\"
 function learn { ls $1 | xargs whatis | grep -v nothing | less; }
 
 ## What services are running here
-#function whatsopen { sudo nmap -sS -O 127.0.0.1 }
+function whatsopen { sudo nmap -sS -O 127.0.0.1; }
 
 # Prints out the number of non-blank lines in the given files, with whitespace and wc counts 
 function gsloc {
