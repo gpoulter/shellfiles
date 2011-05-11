@@ -1,0 +1,4 @@
+unset backup
+set nowrap
+unset nonewlines
+unset historylog
