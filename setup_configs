@@ -7,6 +7,7 @@ configs['.tmux.conf']='source-file ~/.conf/tmux.conf'
 configs['.screenrc']='source ~/.conf/screenrc'
 configs['.inputrc']='$include ~/.conf/inputrc'
 configs['.vimrc']='source ~/.conf/vimrc'
+configs['.hgrc']='%include ~/.conf/hgrc'
 
 # Insert the includes on line 1 of the file
 for file in "${!configs[@]}"; do

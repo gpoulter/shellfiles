@@ -1,0 +1,18 @@
+# Get this config using %include ~/.conf/hgrc
+
+[extensions]
+hgext.extdiff=
+hgext.fetch=
+hgext.color=
+hgext.record=
+rebase=
+
+[extdiff]
+cmd.cdiff = colordiff
+opts.cdiff = -uprN
+cmd.vdiff = kdiff3
+cmd.meld = meld
+
+[ui]
+askusername = True
+
