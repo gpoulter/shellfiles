@@ -12,10 +12,13 @@ configs['.hgrc']='%include ~/.conf/hgrc'
 # Insert the includes on line 1 of the file
 for file in "${!configs[@]}"; do
     val=${configs["$file"]}
-    if ! $(grep -q "$val" ~/$file); then
+    if ! [[ -e ~/$file ]]; then
+        echo $val > ~/$file
+    elif ! $(grep -q "$val" ~/$file); then
         sed -i "1i $val" ~/$file
     fi
 done
 
 # Copy over files that support neither environment nor inclusion
 cp ~/.conf/nanorc ~/.nanorc
+
