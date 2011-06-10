@@ -18,4 +18,4 @@ for file in "${!configs[@]}"; do
 done
 
 # Copy over files that support neither environment nor inclusion
-cp nanorc ~/.nanorc
+cp ~/.conf/nanorc ~/.nanorc
