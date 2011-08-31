@@ -25,7 +25,7 @@ function mkcd { [ -n "$1" ] && mkdir -p "$@" && cd "$1"; }
 function cmdfu { curl "http://www.commandlinefu.com/commands/matching/$@/$(echo -n $@ | openssl base64)/plaintext"; }
 
 ## Search Google for $@
-function google { curl -A Mozilla http://www.google.com/search?q=$@ |html2text -width 80; }
+function google { curl -A Mozilla http://www.google.com/search?q=$@ | html2text -width 80; }
 
 ## Colourful 'grep' for $@
 function cgrep {
@@ -34,28 +34,13 @@ function cgrep {
 
 ## Redefine 'which' to include aliases
 if which -v 2>&1 | grep -q GNU; then
-function md { mkdir -p "$@" && cd "$@"; }
+    function md { mkdir -p "$@" && cd "$@"; }
     alias which='alias | /usr/bin/which --tty-only --read-alias --show-dot --show-tilde'
 fi
 
 ## Display top-10 processes by memory usage
-function ps10 {
+function psmem10 {
     ps aux | sort -nk +4 | tail "$@"
-}
-
-## Remove $1 from PATH
-function pathrm {
-    export PATH=`echo $PATH | sed -e "s=^${1}:==;s=:${1}$==;s=:${1}:=:="`;
-}
-
-## Find exectuables in PATH, grepping names for $@
-function pathgrep {
-    find ${PATH//:/ } -executable -type f -printf "%f\n" | grep "$@"
-}
-
-## Sort PATH, leaving only unique elements
-function pathuniq {
-    export PATH=$(echo $PATH | sed 's/:/\n/g' | sort -u | sed -e '1{$p;x;d;};{H;$!d;x;s/\n/:/g;b;};x;s/\n//g;${p;x;}')
 }
 
 ## Confirm for cp/mv/rm
@@ -74,12 +59,6 @@ function rmtilde() {
     [[ "$1" == "-h" ]] || [[ -z "$1" ]] && { echo "Usage: rmtilde <top-directory>"; return; }
     echo "Removing tilde-backup files under $1"
     find "$1" -name '*~' -print -delete
-}
-
-## Prepend time and history to the prompt
-function timeprompt {
-    echo "Adding time and history number to prompt."
-    export PS1="\! [\t] $PS1";
 }
 
 ## Call $@ every $1 seconds

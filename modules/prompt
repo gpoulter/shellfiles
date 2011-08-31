@@ -29,4 +29,10 @@ function prompt_colorator {
   fi
 }
 
+## Prepend time and history to the prompt
+function timeprompt {
+    echo "Adding time and history number to prompt."
+    export PS1="\! [\t] $PS1";
+}
+
 #prompt_colorator `ansifg green` `ansifg magenta` `ansifg blue`

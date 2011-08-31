@@ -1,6 +1,6 @@
 # -*- sh -*-
 
-## RedHat function to modify PATH without redundant entries
+## RedHat function to add to PATH without redundant entries
 function pathmunge {
     if ! echo $PATH | /bin/egrep -q "(^|:)$1($|:)" ; then
         if [ "$2" = "after" ] ; then
@@ -10,3 +10,19 @@ function pathmunge {
         fi
     fi
 }
+
+## Remove named directory from PATH
+function pathrm {
+    export PATH=`echo $PATH | sed -e "s=^${1}:==;s=:${1}$==;s=:${1}:=:="`;
+}
+
+## Find exectuables in PATH, grepping names for $@
+function pathgrep {
+    find ${PATH//:/ } -executable -type f -printf "%f\n" | grep "$@"
+}
+
+## Sort PATH, leaving only unique elements
+function pathuniq {
+    export PATH=$(echo $PATH | sed 's/:/\n/g' | sort -u | sed -e '1{$p;x;d;};{H;$!d;x;s/\n/:/g;b;};x;s/\n//g;${p;x;}')
+}
+
