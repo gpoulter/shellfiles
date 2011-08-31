@@ -20,13 +20,13 @@ shopt -u histverify # Immediately execute history sub
 export HISTCONTROL="ignoreboth"
 
 # Reduce clutter in the history
-export HISTIGNORE='&:exit:fc:history:ht'
+export HISTIGNORE='&:exit:fc:history:ht:h:l:ls:ll'
 
 # Timestamp the history entries (important!!)
 export HISTTIMEFORMAT="%Y-%m-%d %T "
 
 # Long session history (default is 500)
-export HISTSIZE=5000
+export HISTSIZE=50000
 
 # Long history file (default is 500)
 export HISTFILESIZE=50000
@@ -42,10 +42,16 @@ alias h='history|grep'
 # Update history from other shells
 alias hu='history -n' 
 
+# Print last command as TIME<tab>PWD<tab>COMMAND
+function lastcmd { history 1 | cut -d ' ' -f 4- | sed -r "s/^(.{19}) (.*)/\1\t$(echo $PWD|sed 's/\//\\\//g')\t\2/"; }
+
+# Set termimal title
+function xtermtitle { echo -ne "\033]0;${HOSTNAME%%.*}:${PWD/$HOME/~}\007"; } 
+
 ## Set the title to host:dir, with history appending
 if [[ $TERM == @(rxvt|xterm) ]]; then
-    PROMPT_COMMAND='history -a; echo -ne "\033]0;${HOSTNAME%%.*}:${PWD/$HOME/~}\007"'
+    PROMPT_COMMAND='history -a; lastcmd >> ~/.history; xtermtitle'
 else
-    export PROMPT_COMMAND="history -a;"
+    export PROMPT_COMMAND="history -a; lastcmd >> ~/.history"
 fi
 

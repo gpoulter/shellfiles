@@ -15,8 +15,9 @@ source $CONF/modules/lessconf
 source $CONF/modules/prompt
 
 ## Customise config file locations
-export WGETRC="$CONF/wgetrc"
-export PYTHONSTARTUP="$CONF/pythonrc.py"
+[ ! -f ~/.wgetrc -a -z "$WGETRC" ] && export WGETRC="$CONF/wgetrc"
+[ ! -f ~/.inputrc -a -z "$INPUTRC" ] && export INPUTRC="$CONF/inputrc"
+[[ -z "$PYTHONSTARTUP" ]] && export PYTHONSTARTUP="$CONF/pythonrc.py"
 
 ## Set the prompt color
 #prompt_colorator `ansifg green` `ansifg magenta` `ansifg blue`
