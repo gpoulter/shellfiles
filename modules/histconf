@@ -42,11 +42,11 @@ alias h='history|grep'
 # Update history from other shells
 alias hu='history -n' 
 
-# Print last command as TIME<tab>PWD<tab>COMMAND
-function lastcmd { history 1 | cut -b 8- | sed -r "s/^(.{19}) (.*)/\1\t$(echo $PWD|sed 's/\//\\\//g')\t\2/"; }
-
 # Set termimal title
 function xtermtitle { echo -ne "\033]0;${HOSTNAME%%.*}:${PWD/$HOME/~}\007"; } 
+
+# Print last command as TIME<tab>PWD<tab>COMMAND
+function lastcmd { history 1 | cut -b 8- | sed -r "s/^(.{19}) (.*)/\1\t$(echo $PWD|sed 's/\//\\\//g')\t\2/"; }
 
 # Print top $1 working directories
 function topwds { cat ~/.history | cut -f 2 | sort | uniq -c | sort -n | tail -n ${1:-10}; }
@@ -55,9 +55,6 @@ function topwds { cat ~/.history | cut -f 2 | sort | uniq -c | sort -n | tail -n
 function topcmds { cat ~/.history | cut -f 3 | cut -d ' ' -f 1-$1 | sort | uniq -c | sort -n | tail -n ${2:-10}; }
 
 ## Set the title to host:dir, with history appending
-if [[ $TERM == @(rxvt|xterm) ]]; then
-    PROMPT_COMMAND='history -a; lastcmd >> ~/.history; xtermtitle'
-else
-    export PROMPT_COMMAND="history -a; lastcmd >> ~/.history"
-fi
+export PROMPT_COMMAND="history -a; lastcmd >> ~/.history"
+[[ $TERM == @(rxvt|xterm) ]] && export PROMPT_COMMAND="$PROMPT_COMMAND; xtermtitle"
 
