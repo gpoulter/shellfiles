@@ -48,11 +48,11 @@ function lastcmd { history 1 | cut -b 8- | sed -r "s/^(.{19}) (.*)/\1\t$(echo $P
 # Set termimal title
 function xtermtitle { echo -ne "\033]0;${HOSTNAME%%.*}:${PWD/$HOME/~}\007"; } 
 
-# Print top 10 working directories
-function topwds { cat ~/.history | cut -f 2 | sort | uniq -c | sort -n | tail $@; }
+# Print top $1 working directories
+function topwds { cat ~/.history | cut -f 2 | sort | uniq -c | sort -n | tail -n ${1:-10}; }
 
-# Print top 10 history commands
-function topcmds { cat ~/.history | cut -f 3 | sort | uniq -c | sort -n | tail $@; }
+# Print top $2 history commands examining first $1 arguments
+function topcmds { cat ~/.history | cut -f 3 | cut -d ' ' -f 1-$1 | sort | uniq -c | sort -n | tail -n ${2:-10}; }
 
 ## Set the title to host:dir, with history appending
 if [[ $TERM == @(rxvt|xterm) ]]; then
