@@ -43,7 +43,7 @@ alias h='history|grep'
 alias hu='history -n' 
 
 # Print last command as TIME<tab>PWD<tab>COMMAND
-function lastcmd { history 1 | cut -d ' ' -f 4- | sed -r "s/^(.{19}) (.*)/\1\t$(echo $PWD|sed 's/\//\\\//g')\t\2/"; }
+function lastcmd { history 1 | cut -b 8- | sed -r "s/^(.{19}) (.*)/\1\t$(echo $PWD|sed 's/\//\\\//g')\t\2/"; }
 
 # Set termimal title
 function xtermtitle { echo -ne "\033]0;${HOSTNAME%%.*}:${PWD/$HOME/~}\007"; } 
