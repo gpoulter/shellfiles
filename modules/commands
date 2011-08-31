@@ -15,6 +15,9 @@ alias abspath='readlink -f'
 ## Use emacsclient
 alias e="emacsclient -n -a emacs"
 
+## Funny
+alias can-has="sudo apt-get install"
+
 ## Get a text wiki summary over DNS
 function wiki { dig +short txt $1.wp.dg.cx; }
 
