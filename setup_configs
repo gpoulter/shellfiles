@@ -13,12 +13,14 @@ configs['.hgrc']='%include ~/.conf/hgrc'
 for file in "${!configs[@]}"; do
     val=${configs["$file"]}
     if ! [[ -e ~/$file ]]; then
+        echo "echo $val > ~/$file"
         echo $val > ~/$file
-    elif ! $(grep -q "$val" ~/$file); then
+    elif ! grep -q "$val" ~/$file; then
+        echo "sed -i "1i $val" ~/$file"
         sed -i "1i $val" ~/$file
     fi
 done
 
-# Copy over files that support neither environment nor inclusion
-cp ~/.conf/nanorc ~/.nanorc
+# Interactively copy over files lacking inclusion
+diff -u ~/.nanorc ~/.conf/nanorc || cp -i ~/.conf/nanorc ~/.nanorc
 

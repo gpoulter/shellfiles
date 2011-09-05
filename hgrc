@@ -5,12 +5,12 @@ hgext.extdiff=
 hgext.fetch=
 hgext.color=
 hgext.record=
-rebase=
+hgext.bookmarks=
 
 [extdiff]
 cmd.cdiff = colordiff
 opts.cdiff = -uprN
-cmd.vdiff = kdiff3
+cmd.kdiff = kdiff3
 cmd.meld = meld
 
 [ui]
