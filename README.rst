@@ -1,14 +1,15 @@
 Fork the repository and tweak settings to taste, or just copy interesting parts.
 
-Pulling repo to ~/.conf (or other directory) and run "./setup.sh install".
+To install, pull the repo to ~/.conf (for example) and run "./setup.sh install".
 
-This  will insert include lines to reference defaults from ~/.conf for the following files::
- .bash_aliases
- .tmux.conf
- .screenrc
- .inputrc
- .vimrc
- .hgrc
+This will insert include lines to reference defaults from ~/.conf for the following files:
+
+- .bash_aliases
+- .tmux.conf
+- .screenrc
+- .inputrc
+- .vimrc
+- .hgrc
 
 Thereafter "hg pull -u" will update the configuration.   
 
