@@ -1,6 +1,6 @@
 (provide 'functions-init)
 
-;;;; Scroll Bindings
+;;;; Scroll Functions
 
 (defun scroll-down-one ()
   "Scroll viewport down one line."
@@ -31,18 +31,7 @@
     (save-excursion (next-line) (transpose-lines -1))
     (move-to-column col)))
 
-;; Line moving commands just like org-mode
-(global-set-key [(meta down)] 'move-line-down)
-(global-set-key [(meta up)] 'move-line-up)
-
-;; Linux scroll commands for ergoemacs-colemak 
-(global-set-key [(super shift n)] 'scroll-down-one)
-(global-set-key [(super shift i)] 'scroll-up-one)
-(global-set-key [(super shift u)] 'scroll-down-half)
-(global-set-key [(super shift e)] 'scroll-up-half)
-
-
-;;;; Additional Bindings
+;;;; Additional Functions
 
 (defun remove-hard-wrap () 
   "Opposite of fill-paragraph: single long line."
@@ -110,6 +99,18 @@
  "Font-lock work-around for RedHat"
   (font-lock-mode)
   (turn-on-font-lock))
+
+;; KEYBINDINGS FOR ABOVE
+
+;; Line moving commands just like org-mode
+(global-set-key [(meta down)] 'move-line-down)
+(global-set-key [(meta up)] 'move-line-up)
+
+;; Linux scroll commands for ergoemacs-colemak 
+(global-set-key [(super shift n)] 'scroll-down-one)
+(global-set-key [(super shift i)] 'scroll-up-one)
+(global-set-key [(super shift u)] 'scroll-down-half)
+(global-set-key [(super shift e)] 'scroll-up-half)
 
 ;; Function keybindings
 (global-set-key [(control x)(meta w)] 'remove-hard-wrap-region)

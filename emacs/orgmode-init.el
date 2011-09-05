@@ -18,15 +18,6 @@
 ;; Replace the default isearch-backward-regexp with remember function
 (define-key global-map [(control meta r)] 'org-remember)
 
-(setq org-remember-templates
-      '(
-        ("Call"      ?c "* %U %?\n  %i"     "CallRecord.org" "This Month")
-        ("Event"     ?e "* EVENT %?\n  %i"  "Personal.org"   "Calendar")
-        ("Personal"  ?p "* TODO %?\n  %i"   "Personal.org"   "Inbox")
-        ("Office"    ?o "* TODO %?\n  %i"   "Office.org"     "Inbox")
-        ("Notes"     ?n "* %u %?\n  %i"     "Notes.org"      "This Month")
-        ("Journal"   ?j "* %u %?"           "Journal.org"    "This Month")))
-
 ;; Recognise .org files
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
 
@@ -49,7 +40,7 @@
 (global-set-key [(control c)(b)] 'org-iswitchb)
 (define-key org-mode-map [(control c)(backtab)] 'org-show-two-levels)
 
-;; Better bindings for outline navigation
+;; Better bindings for outline navigation on EmacsW32 and Linux
 (if (eq window-system 'w32)
   (progn
     (define-key org-mode-map [(control meta up)] 'org-previous-heading)

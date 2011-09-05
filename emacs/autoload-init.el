@@ -4,7 +4,7 @@
 (if (not (eq window-system 'w32)) (progn
   (if (load "rng-auto" t)
     (autoload 'nxml-mode "nxml-mode" "Load nxml-mode")
-    (add-to-list 'auto-mode-alist '("\\.\\(xml\\|xsl\\|rng\\|xhtml\\|html\\|tmpl\\)$" . nxml-mode))
+    (add-to-list 'auto-mode-alist '("\\.\\(xml\\|xsl\\|rng\\|xhtml\\|html\\)$" . nxml-mode))
 )))
 
 ;; Find-file-in-project (looks for .emacs-project)
@@ -18,15 +18,6 @@
 ;; JavaScript
 (autoload 'javascript-mode "javascript" "Load javascript-mode" t)
 (add-to-list 'auto-mode-alist '("\\.js$" . javascript-mode))
-
-;; Octave
-(autoload 'octave-mode "octave-mode" "Load octave-mode" t)
-(add-to-list 'auto-mode-alist '("\\.m$" . octave-mode))
-
-;; Puppet
-(autoload 'puppet-mode "puppet-mode" "Load puppet-mode" t)
-(add-to-list 'auto-mode-alist '("\\.pp\\'" . puppet-mode))
-(add-hook 'puppet-mode-hook 'turn-on-font-lock)
 
 ;; Python (often already enabled)
 (autoload 'python-mode "python" "Python Mode." t)

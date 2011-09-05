@@ -12,13 +12,3 @@
 (set-default-coding-systems 'utf-8-unix)
 (prefer-coding-system 'utf-8-unix)
 (set-default default-buffer-file-coding-system 'utf-8-unix)
-
-;; Use aspell instead of ispell on windows
-(setq-default ispell-program-name "C:/Program Files/Aspell/bin/aspell.exe")
-(setq-default ispell-dictionary "british")
-
-;; Compile to HTML for reStructuredText (rst.el)
-;(setcdr (assq 'html rst-compile-toolsets)
-;        '("python C:/Python26/Scripts/rst2html.py" ".html" nil))
-;(setcdr (assq 'html rst-compile-toolsets)
-;        '("rst2html" ".html" "--stylesheet=/home/graham/.voidspace.css"))
