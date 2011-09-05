@@ -34,6 +34,7 @@ function uninstall {
         if grep -q "$val" ~/$file; then
             echo "sed -i "\@^$val@d" ~/$file"
             sed -i "\@^$val@d" ~/$file
+            [[ -s ~/$file ]] || rm -v ~/$file
         fi
     done
     [[ -f ~/.nanorc ]] && diff -q ~/.nanorc $CONF/nanorc && rm -v ~/.nanorc
