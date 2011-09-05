@@ -1,4 +1,4 @@
-# Get this config using %include ~/.conf/hgrc
+# Get this config with "%include ~/.conf/hgrc"
 
 [extensions]
 hgext.extdiff=

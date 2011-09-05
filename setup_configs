@@ -22,5 +22,5 @@ for file in "${!configs[@]}"; do
 done
 
 # Interactively copy over files lacking inclusion
-diff -u ~/.nanorc ~/.conf/nanorc || cp -i ~/.conf/nanorc ~/.nanorc
+diff -u ~/.nanorc $CONF/nanorc || cp -i $CONF/nanorc ~/.nanorc
 

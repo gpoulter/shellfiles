@@ -1,4 +1,4 @@
-" Get this config using source ~/.conf/vimrc 
+" Get this config with "source ~/.conf/vimrc"
 
 " ****************************************************************************
 " Program Behaviour
