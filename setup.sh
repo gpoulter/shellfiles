@@ -25,6 +25,7 @@ function install {
     done
     # Copy files that lack inclusion
     if ! [[ -f ~/.nanorc ]] || ! diff -u ~/.nanorc $CONF/nanorc; then cp -iv $CONF/nanorc ~/.nanorc; fi
+    [[ -f ~/.vimpython ]] || ln -vs $CONF/vimpython ~/.vimpython
 }
 
 # Remove the includes
@@ -38,6 +39,7 @@ function uninstall {
         fi
     done
     [[ -f ~/.nanorc ]] && diff -q ~/.nanorc $CONF/nanorc && rm -v ~/.nanorc
+    [[ -L ~/.vimpython ]] && rm -v ~/.vimpython
 }
 
 $1
