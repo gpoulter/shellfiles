@@ -1,6 +1,21 @@
 ## Do not glob . or .. when using .*
 export GLOBIGNORE='.:..'
 
+# Long session history (default is 500)
+HISTSIZE=50000
+
+# Long history file (default is 500)
+HISTFILESIZE=50000
+
+# Ignore duplicates and lines starting with space
+HISTCONTROL="ignoreboth"
+
+# Reduce clutter in the history
+HISTIGNORE='&:exit:fc:history:ht:h:l:ls:ll'
+
+# Timestamp the history entries (important!!)
+HISTTIMEFORMAT="%Y-%m-%d %T "
+
 ## Shell options
 shopt -s cdspell      # Correct spelling
 shopt -s checkhash    # Look up commands
@@ -15,21 +30,6 @@ shopt -s cmdhist    # Save all lines of multi-line commands in history
 shopt -s histappend # Append to .bash_history on exit
 shopt -s histreedit # Edit failed history subs
 shopt -u histverify # Immediately execute history sub
-
-# Ignore duplicates and lines starting with space
-export HISTCONTROL="ignoreboth"
-
-# Reduce clutter in the history
-export HISTIGNORE='&:exit:fc:history:ht:h:l:ls:ll'
-
-# Timestamp the history entries (important!!)
-export HISTTIMEFORMAT="%Y-%m-%d %T "
-
-# Long session history (default is 500)
-export HISTSIZE=50000
-
-# Long history file (default is 500)
-export HISTFILESIZE=50000
 
 ## History aliases
 
