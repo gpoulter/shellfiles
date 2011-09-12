@@ -2,19 +2,25 @@
 export GLOBIGNORE='.:..'
 
 # Long session history (default is 500)
-HISTSIZE=50000
+export GHISTSIZE=20000
 
 # Long history file (default is 500)
-HISTFILESIZE=50000
+export GHISTFILESIZE=100000
 
-# Ignore duplicates and lines starting with space
-HISTCONTROL="ignoreboth"
+# Ignore lines starting with space, erase earlier dups
+export GHISTCONTROL="ignorespace:erasedups"
 
 # Reduce clutter in the history
-HISTIGNORE='&:exit:fc:history:ht:h:l:ls:ll'
+export GHISTIGNORE='&:exit:fc:history:ht:h:l:ls:ll'
 
 # Timestamp the history entries (important!!)
-HISTTIMEFORMAT="%Y-%m-%d %T "
+export GHISTTIMEFORMAT="%Y-%m-%d %T "
+
+## History options
+shopt -s histappend # Append to .bash_history on exit
+shopt -s cmdhist    # Save all lines of multi-line commands in history
+shopt -s histreedit # Edit failed history subs
+shopt -u histverify # Immediately execute history sub
 
 ## Shell options
 shopt -s cdspell      # Correct spelling
@@ -24,12 +30,6 @@ shopt -s extglob      # Pattern-matching glob features
 shopt -u dotglob      # Do not include .config files in normal glob
 shopt -u failglob     # Don't fail on nomatch, just leave the *'s in
 shopt -u nullglob     # Don't go to null on nomatch, just leave the *'s in
-
-## History options
-shopt -s cmdhist    # Save all lines of multi-line commands in history
-shopt -s histappend # Append to .bash_history on exit
-shopt -s histreedit # Edit failed history subs
-shopt -u histverify # Immediately execute history sub
 
 ## History aliases
 
