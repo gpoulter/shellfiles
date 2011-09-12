@@ -1,20 +1,20 @@
 ## Do not glob . or .. when using .*
 export GLOBIGNORE='.:..'
 
+# Timestamp the history entries (important!!)
+export HISTTIMEFORMAT="%Y-%m-%d %T "
+
 # Long session history (default is 500)
-export GHISTSIZE=20000
+export HISTSIZE=20000
 
 # Long history file (default is 500)
-export GHISTFILESIZE=100000
+export HISTFILESIZE=100000
 
 # Ignore lines starting with space, erase earlier dups
-export GHISTCONTROL="ignorespace:erasedups"
+export HISTCONTROL="ignorespace:erasedups"
 
 # Reduce clutter in the history
-export GHISTIGNORE='&:exit:fc:history:ht:h:l:ls:ll'
-
-# Timestamp the history entries (important!!)
-export GHISTTIMEFORMAT="%Y-%m-%d %T "
+export HISTIGNORE='&:exit:fc:history:ht:h:l:ls:ll'
 
 ## History options
 shopt -s histappend # Append to .bash_history on exit
