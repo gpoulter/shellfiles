@@ -4,9 +4,9 @@
 function pathmunge {
     if [[ -d $1 ]] && ! echo $PATH | /bin/egrep -q "(^|:)$1($|:)" ; then
         if [ "$2" = "after" ] ; then
-            PATH=$PATH:$1
+            export PATH=$PATH:$1
         else
-            PATH=$1:$PATH
+            export PATH=$1:$PATH
         fi
     fi
 }
