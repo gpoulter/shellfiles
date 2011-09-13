@@ -36,10 +36,11 @@ function baseprompt {
 
 ## True if directory $1 is found in $PWD or ancestors thereof
 function dirinparent {
+    type -t cl_dirname &>/dev/null || alias cl_dirname=dirname
     local DIR="$PWD"
     while [[ "$DIR" != "/" ]]; do
         [[ -d "$DIR/$1" ]] && return 0
-        DIR="$(dirname $DIR)"
+        DIR="$(cl_dirname $DIR)"
     done
     return 1
 }
