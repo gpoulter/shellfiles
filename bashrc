@@ -6,6 +6,7 @@
 ## Load interactive definitions
 
 CONF="$(dirname $(readlink -f $BASH_SOURCE))"
+source "$CONF/bash/dirname"
 source "$CONF/bash/path"
 source "$CONF/bash/history"
 source "$CONF/bash/cygwin"

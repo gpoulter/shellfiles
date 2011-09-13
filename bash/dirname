@@ -1,0 +1,72 @@
+# FROM: http://poisonbit.wordpress.com/2010/12/22/dirname-ng-bash-is-slow-just-10-times-faster-than-c/
+#
+# cl_dirname STR1 STR2 STR3
+#
+# Comments comes from:
+# http://www.opengroup.org/onlinepubs/000095399/utilities/dirname.html
+#
+# note:
+# STDOUT: The dirname utility shall write a line to the standard output
+# in the following format: &amp;quot;%sn&amp;quot;, &amp;lt;resulting string&amp;gt;
+#
+cl_dirname () {
+    local string; for string; do
+
+        # If there are not slash on string, it is '.'
+        [[ "$string" = */* ]] || { printf '.\n'; continue; }
+
+        # 1 If string is //, skip steps 2 to 5.
+        [[ "$string"  = // ]] && {
+
+        # 2 If string consists entirely of slash characters, string
+        # shall be set to a single slash character.
+        # In this case, skip steps 3 to 8.
+        [[ -z "${string///}" ]] && {
+            printf '/\n'
+            continue # In this case, skip steps 3 to 8.
+        }
+
+        # 3 If there are any trailing slash characters in string,
+        # they shall be removed.
+        local old_string="$string"  # needed on step 4
+        for ((i=${#string}-1; i>0; i--)); do
+           if [[ ${string:$i:1} != '/' ]]; then break; fi;
+        done
+        string="${string::$i+1}"
+
+        # 4 If there are no slash characters remaining in string,
+        # string shall be set to a single period character.
+        # In this case, skip steps 5 to 8.
+        [ "X$old_string" = "X$string" ] && {
+            printf '.\n'
+            continue # In this case, skip steps 5 to 8.
+        }
+
+        } # end of 1
+
+        # 5 If there are any trailing non-slash characters in string,
+        # they shall be removed.
+        string="${string%/*}"
+
+        # 6 If the remaining string is //, it is implementation-defined
+        # whether steps 7 and 8 are skipped or processed.
+        [[ "$string" = // ]] || {
+
+        # 7 If there are any trailing slash characters in string,
+        # they shall be removed.
+        for ((i=${#string}-1; i>0; i--)); do
+            if [[ ${string:$i:1} != '/' ]]; then break; fi;
+        done
+        string="${string::$i+1}"
+
+        # 8 If the remaining string is empty,
+        # string shall be set to a single slash character.
+        : ${string:='/'}
+
+        } # end of 6
+
+        # The dirname utility shall write a line to the standard output
+        # in the following format: "%s\n", <resulting string>
+        printf '%s\n' "$string"
+    done
+}
