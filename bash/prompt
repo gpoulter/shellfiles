@@ -74,6 +74,6 @@ function ps1_hist { export PS1="[\!] ${1:-$PS1}"; }
 
 ## Prepend version control branch to prompt
 function ps1_vcs { 
-    export PROMPT_COMMAND="$PROMPT_COMMAND; set_branch_cd"
+    export PROMPT_COMMAND="${PROMPT_COMMAND:-true}; set_branch_cd"
     export PS1="\${BRANCH_NAME}${1:-$PS1}"; 
 }

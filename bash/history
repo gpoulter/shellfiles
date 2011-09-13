@@ -55,6 +55,6 @@ function topwds { tail -n ${2:-5000} ~/.history | cut -f 2 | sort | uniq -c | so
 function topcmds { tail -n ${3:-5000} ~/.history | cut -f 3 | cut -d ' ' -f 1-$2 | sort | uniq -c | sort -n | tail -n ${1:-10}; }
 
 ## Set the title to host:dir, with history appending
-export PROMPT_COMMAND="history -a; lastcmd >> ~/.history"
+export PROMPT_COMMAND="${PROMPT_COMMAND:-true}; history -a; lastcmd >> ~/.history"
 [[ $TERM == @(rxvt|xterm) ]] && export PROMPT_COMMAND="$PROMPT_COMMAND; xtermtitle"
 
