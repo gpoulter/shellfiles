@@ -1,7 +1,7 @@
 # -*- sh -*-
 
-## ANSI attribute sequences for setting foreground color
-function ansifg {
+## Print ANSI attribute for some named foreground colors
+function ansi_fgcol {
   case $1 in
     red) echo "01;31" ;;
     green) echo "01;32" ;;
@@ -13,26 +13,66 @@ function ansifg {
   esac
 }
 
-## Set promt colors: user to $1, host to $2 and path to $3
-## Prompt itself is user@host:/path$ or host:/path#
-function prompt_colorator {
-  # Example for green user and host, blue path
-  #PS1="\[\033[01;32m\]\u@\h:\[\033[01;34m\]\w\[\033[00m\]\\$ "
-  local usr=""
-  local extra=""
-  [[ "$(id -u)" != 0 ]] && usr="\u@"
-  [[ -n "$VIMRUNTIME" ]] && extra="[vim] "
+# Print PS1 ANSI sequence for some named foreground color
+function ansi_fgseq {
+    echo "\[\033[$(ansi_fgcol $1)m\]"
+}
+
+# Print a string for PS1 with colors PS1_COLOR_U, PS1_COLOR_H and PS1_COLOR_W
+# Prefix with [vim] if VIMRUNTIME is set
+# Prefixes with user name for non-root users
+PS1_COLOR_U=$(ansi_fgseq green)
+PS1_COLOR_H=$(ansi_fgseq green)
+PS1_COLOR_W=$(ansi_fgseq blue)
+function baseprompt {
+  [[ "$(id -u)" != 0 ]] && local p_usr="\u@"
+  [[ -n "$VIMRUNTIME" ]] && local p_vim="[vim] "
   if [[ -n "$LS_COLORS" ]]; then
-      export PS1="$extra\[\033[$1m\]${usr}\[\033[$2m\]\h:\[\033[$3m\]\w\[\033[00m\]\\$ "
+      echo "${p_vim}${PS1_COLOR_U}${p_usr}${PS1_COLOR_H}\h:${PS1_COLOR_W}\w\[\033[00m\]\\$ "
   else
-      export PS1="$extra${usr}\h:\w\\$ "
+      echo "${p_vim}${p_usr}\h:\w\\$ "
   fi
 }
 
-## Prepend time and history to the prompt
-function timeprompt {
-    echo "Adding time and history number to prompt."
-    export PS1="\! [\t] $PS1";
+## True if directory $1 is found in $PWD or ancestors thereof
+function dirinparent {
+    local DIR="$PWD"
+    while [[ "$DIR" != "/" ]]; do
+        [[ -d "$DIR/$1" ]] && return 0
+        DIR="$(dirname $DIR)"
+    done
+    return 1
 }
 
-#prompt_colorator `ansifg green` `ansifg magenta` `ansifg blue`
+## Detect Mercurial/Git/Bazaar branch, setting BRANCH_DIR and BRANCH_NAME
+function set_branch {
+    BRANCH_DIR="$PWD"
+    local branch
+    if hash git &>/dev/null && dirinparent .git; then 
+        branch="$(git branch 2>/dev/null | sed -e '/^[^*]/d' -e 's/\* //')"
+    elif hash hg &>/dev/null && dirinparent .hg; then
+        branch="$(hg branch 2>/dev/null)"
+    elif hash bzr &>/dev/null && dirinparent .bzr; then 
+        branch="$(bzr nick 2>/dev/null)"
+    fi
+    if [[ -n "$branch" ]]; then BRANCH_NAME="[$branch] "; else BRANCH_NAME=""; fi
+}
+## Only sets the branch when PWD changes from BRANCH_DIR
+function set_branch_cd {
+    [[ $PWD != $BRANCH_DIR ]] && set_branch
+}
+
+## Reset PS1 to baseprompt value
+function ps1_reset { export PS1="$(baseprompt)"; }
+
+## Prepend time to prompt
+function ps1_time { export PS1="[\t] ${1:-$PS1}"; }
+
+## Prepend history number to prompt
+function ps1_hist { export PS1="[\!] ${1:-$PS1}"; }
+
+## Prepend version control branch to prompt
+function ps1_vcs { 
+    export PROMPT_COMMAND="$PROMPT_COMMAND; set_branch_cd"
+    export PS1="\${BRANCH_NAME}${1:-$PS1}"; 
+}
