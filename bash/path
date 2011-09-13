@@ -2,7 +2,7 @@
 
 ## RedHat function to add to PATH without redundant entries
 function pathmunge {
-    if ! echo $PATH | /bin/egrep -q "(^|:)$1($|:)" ; then
+    if [[ -d $1 ]] && ! echo $PATH | /bin/egrep -q "(^|:)$1($|:)" ; then
         if [ "$2" = "after" ] ; then
             PATH=$PATH:$1
         else
@@ -13,7 +13,7 @@ function pathmunge {
 
 ## Remove named directory from PATH
 function pathrm {
-    export PATH=`echo $PATH | sed -e "s=^${1}:==;s=:${1}$==;s=:${1}:=:="`;
+    export PATH=$(echo $PATH | sed -e "s=^${1}:==;s=:${1}$==;s=:${1}:=:=");
 }
 
 ## Find exectuables in PATH, grepping names for $@

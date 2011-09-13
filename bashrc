@@ -6,13 +6,13 @@
 ## Load interactive definitions
 
 CONF="$(dirname $(readlink -f $BASH_SOURCE))"
-source $CONF/bash/pathmunge
-source $CONF/bash/cygwin
-source $CONF/bash/commands
-source $CONF/bash/histconf
-source $CONF/bash/lsconf
-source $CONF/bash/lessconf
-source $CONF/bash/prompt
+source "$CONF/bash/path"
+source "$CONF/bash/history"
+source "$CONF/bash/cygwin"
+source "$CONF/bash/functions"
+source "$CONF/bash/ls"
+source "$CONF/bash/less"
+source "$CONF/bash/prompt"
 
 ## Customise config file locations
 [ ! -f ~/.wgetrc -a -z "$WGETRC" ] && export WGETRC="$CONF/wgetrc"
