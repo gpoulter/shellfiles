@@ -8,6 +8,9 @@ function killall {
   ps -ea | grep $1 | gawk '$1 ~ /^[^SI]/ { system("kill -9 " $1); }'
 }
 
+# Escape any spaces in LESSOPEN
+export LESSOPEN="|$(echo $HOME|sed 's/\ /\\\ /g')/.lesspipe.sh %s"
+
 ########################################################
 ## Share SSH agent between shells
 

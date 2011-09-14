@@ -4,18 +4,6 @@ export LESS='--LONG-PROMPT --RAW-CONTROL-CHARS'
 alias le='less -R' # interpret ascii codes
 alias v='less -R'  # shorter than even 'le'
 
-## Use default lesspipe if available, else custom
-if [[ -x "/usr/bin/lesspipe" ]]; then
-    eval "$(/usr/bin/lesspipe)"
-elif [[ -x "/usr/bin/lesspipe.sh" ]]; then
-    eval "$(/usr/bin/lesspipe.sh)"
-elif [[ -x "$HOME/.lesspipe.sh" ]]; then
-    export LESSOPEN="|$HOME/.lesspipe.sh %s"
-    # For cygwin, escape any spaces in LESSOPEN
-    if [[ "$(uname)" == *CYGWIN* ]]; then
-        export LESSOPEN="|$(echo $HOME|sed 's/\ /\\\ /g')/.lesspipe.sh %s"
-    fi
-fi
 
 ## Use hless for syntax highlighting
 if [[ -x "$(type -p source-highlight)" ]]; then
