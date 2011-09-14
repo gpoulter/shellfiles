@@ -34,7 +34,7 @@ function baseprompt {
   fi
 }
 
-## Return git/hg/bzr if in a branch, else empty string
+## Return git/hg/bzr/svn if in a branch, else empty string
 ## Only returns a vcs if its binary is found in $PATH
 function vcs_type {
     type -t cl_dirname &>/dev/null || alias cl_dirname=dirname
@@ -48,14 +48,14 @@ function vcs_type {
     done
 }
 
-## Detect Mercurial/Git/Bazaar branch, setting BRANCH_DIR and BRANCH_NAME
-## Bazaar nick only updated on change working directory, due to slowness of bzr nick
+## Detect version control branch setting BRANCH_DIR, BRANCH_NAME, BRANCH_PROMPT
+## Very fast except for calling "bzr nick" on cd into a Bazaar branch
 function set_branch {
     case $(vcs_type) in
         git) BRANCH_NAME="$(git branch 2>/dev/null | sed -e '/^[^*]/d' -e 's/\* //')";;
         hg) BRANCH_NAME="$(hg branch 2>/dev/null)";;
-        bzr) [[ $PWD != $BRANCH_DIR ]] && BRANCH_NAME="$(bzr nick 2>/dev/null)";;
         svn) BRANCH_NAME="$(svn info 2>/dev/null | grep -e '^Repository Root:' | sed -e 's#.*/##')";;
+        bzr) [[ $PWD != $BRANCH_DIR ]] && BRANCH_NAME="$(bzr nick 2>/dev/null)";;
         *) BRANCH_NAME="";;
     esac
     BRANCH_DIR="$PWD"
