@@ -41,7 +41,7 @@ function vcs_type {
     local dir="$PWD"
     local vcs
     while [[ "${dir}" != "/" ]]; do
-        for vcs in git hg bzr; do
+        for vcs in git hg svn bzr; do
             [[ -d "${dir}/.${vcs}" ]] && hash $vcs &>/dev/null && { echo $vcs; return 0; }
         done
         dir="$(cl_dirname ${dir})"
@@ -55,6 +55,7 @@ function set_branch {
         git) BRANCH_NAME="$(git branch 2>/dev/null | sed -e '/^[^*]/d' -e 's/\* //')";;
         hg) BRANCH_NAME="$(hg branch 2>/dev/null)";;
         bzr) [[ $PWD != $BRANCH_DIR ]] && BRANCH_NAME="$(bzr nick 2>/dev/null)";;
+        svn) BRANCH_NAME="$(svn info 2>/dev/null | grep -e '^Repository Root:' | sed -e 's#.*/##')";;
         *) BRANCH_NAME="";;
     esac
     BRANCH_DIR="$PWD"
