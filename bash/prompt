@@ -51,15 +51,15 @@ function vcs_type {
 ## Detect Mercurial/Git/Bazaar branch, setting BRANCH_DIR and BRANCH_NAME
 ## Bazaar nick only updated on change working directory, due to slowness of bzr nick
 function set_branch {
-    local branch=""
     case $(vcs_type) in
-        git) branch="$(git branch 2>/dev/null | sed -e '/^[^*]/d' -e 's/\* //')";;
-        hg) branch="$(hg branch 2>/dev/null)";;
-        bzr) [[ $PWD != $BRANCH_DIR ]] && branch="$(bzr nick 2>/dev/null)";;
+        git) BRANCH_NAME="$(git branch 2>/dev/null | sed -e '/^[^*]/d' -e 's/\* //')";;
+        hg) BRANCH_NAME="$(hg branch 2>/dev/null)";;
+        bzr) [[ $PWD != $BRANCH_DIR ]] && BRANCH_NAME="$(bzr nick 2>/dev/null)";;
+        *) BRANCH_NAME="";;
     esac
     BRANCH_DIR="$PWD"
-    BRANCH_NAME=""
-    [[ -n "$branch" ]] && BRANCH_NAME="[$branch] " 
+    BRANCH_PROMPT=""
+    [[ -n "$BRANCH_NAME" ]] && BRANCH_PROMPT="[$BRANCH_NAME] "
 }
 
 ## Reset PS1 to baseprompt value
@@ -74,5 +74,5 @@ function ps1_hist { export PS1="[\!] ${1:-$PS1}"; }
 ## Prepend version control branch to prompt
 function ps1_vcs { 
     export PROMPT_COMMAND="${PROMPT_COMMAND:-true}; set_branch"
-    export PS1="\${BRANCH_NAME}${1:-$PS1}"; 
+    export PS1="\${BRANCH_PROMPT}${1:-$PS1}"; 
 }
