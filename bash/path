@@ -3,7 +3,7 @@
 ## RedHat function to add to PATH without redundant entries
 function pathmunge {
     if [[ -d $1 ]] && ! echo $PATH | /bin/egrep -q "(^|:)$1($|:)" ; then
-        if [ "$2" = "after" ] ; then
+        if [[ "$2" == "after" ]] ; then
             export PATH=$PATH:$1
         else
             export PATH=$1:$PATH

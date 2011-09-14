@@ -16,9 +16,9 @@ source "$CONF/bash/less"
 source "$CONF/bash/prompt"
 
 ## Customise config file locations
-[ ! -f ~/.wgetrc -a -z "$WGETRC" ] && export WGETRC="$CONF/wgetrc"
-[ ! -f ~/.inputrc -a -z "$INPUTRC" ] && export INPUTRC="$CONF/inputrc"
-[[ -z "$PYTHONSTARTUP" ]] && export PYTHONSTARTUP="$CONF/pythonrc.py"
+if ! [[ -f ~/.wgetrc ]] && [[ -z "$WGETRC" ]]; then export WGETRC="$CONF/wgetrc"; fi
+if [[ -f ~/.inputrc ]] && [[ -z "$INPUTRC" ]]; then export INPUTRC="$CONF/inputrc"; fi
+if [[ -z "$PYTHONSTARTUP" ]]; then export PYTHONSTARTUP="$CONF/pythonrc.py"; fi
 
 ## Set the prompt color
 #prompt_colorator `ansifg green` `ansifg magenta` `ansifg blue`
