@@ -65,7 +65,7 @@ function set_branch {
 
 ## Prepend version control branch to prompt
 function ps1_vcs { 
-    export PROMPT_COMMAND="${PROMPT_COMMAND:-true}; set_branch"
+    export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND;} set_branch"
     export PS1="\${BRANCH_PROMPT}${1:-$PS1}"; 
 }
 
@@ -95,7 +95,7 @@ function title_reverse {
 # Set title from PROMPT_COMMAND
 function autotitle {
     if [[ $TERM == @(rxvt|xterm) ]]; then
-        export PROMPT_COMMAND="${PROMPT_COMMAND:-true}; ${1:-title_reverse}";
+        export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND;} ${1:-title_reverse}";
     fi
 }
 
