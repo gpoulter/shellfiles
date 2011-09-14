@@ -43,7 +43,7 @@ alias h='history|grep'
 alias hu='history -n' 
 
 # Print last command as TIME<tab>PWD<tab>COMMAND
-function lastcmd { history 1 | cut -b 8- | sed -r "s/^(.{19}) (.*)/\1\t$(echo $PWD|sed 's/\//\\\//g')\t\2/"; }
+function lastcmd { local H=$(history 1); H=$(echo -n ${H/+([0-9])}); echo -e "${H:0:19}\t${PWD}\t${H:20}"; }
 
 # Print top $1 (10) working directories, based on $2 (5000) most recent commands
 function topwds { tail -n ${2:-5000} ~/.history | cut -f 2 | sort | uniq -c | sort -n | tail -n ${1:-10}; }
