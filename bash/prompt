@@ -82,20 +82,20 @@ function ps1_hist { export PS1="[\!] ${1:-$PS1}"; }
 function title { echo -ne "\033]2;$@\007"; }
 
 # Set terminal title from algorithm
-function longtitle { 
-    echo -ne "\033]0;${HOSTNAME%%.*}:${PWD/$HOME/~}\007"; 
+function title_long {
+    echo -ne "\033]0;${HOSTNAME%%.*}:${PWD/$HOME/~}\007";
 } 
-function shorttitle { 
-    local wd="${PWD/$HOME/~}"; 
-    local hn="${HOSTNAME%%.*}"; 
-    hn="${hn##*-}"; 
-    echo -ne "\033]0;${hn:0:4}:${wd##*/}\007"; 
+function title_reverse {
+    local wd="${PWD/$HOME/~}";
+    local hn="${HOSTNAME%%.*}";
+    hn="${hn##*-}";
+    echo -ne "\033]0;${wd}:${USER:0:1}@${hn:0:4}\007";
 } 
 
 # Set title from PROMPT_COMMAND
 function autotitle {
     if [[ $TERM == @(rxvt|xterm) ]]; then
-        export PROMPT_COMMAND="${PROMPT_COMMAND:-true}; ${1:-shorttitle}";
+        export PROMPT_COMMAND="${PROMPT_COMMAND:-true}; ${1:-title_reverse}";
     fi
 }
 
