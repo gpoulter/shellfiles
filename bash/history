@@ -42,9 +42,6 @@ alias h='history|grep'
 # Update history from other shells
 alias hu='history -n' 
 
-# Set termimal title
-function xtermtitle { echo -ne "\033]0;${HOSTNAME%%.*}:${PWD/$HOME/~}\007"; } 
-
 # Print last command as TIME<tab>PWD<tab>COMMAND
 function lastcmd { history 1 | cut -b 8- | sed -r "s/^(.{19}) (.*)/\1\t$(echo $PWD|sed 's/\//\\\//g')\t\2/"; }
 
@@ -54,7 +51,6 @@ function topwds { tail -n ${2:-5000} ~/.history | cut -f 2 | sort | uniq -c | so
 # Print top $1 (10) recent commands, examining first $2 (all) arguments, based on $3 (5000) most recent commands
 function topcmds { tail -n ${3:-5000} ~/.history | cut -f 3 | cut -d ' ' -f 1-$2 | sort | uniq -c | sort -n | tail -n ${1:-10}; }
 
-## Set the title to host:dir, with history appending
+# Append to history on displaying next prompt
 export PROMPT_COMMAND="${PROMPT_COMMAND:-true}; history -a; lastcmd >> ~/.history"
-[[ $TERM == @(rxvt|xterm) ]] && export PROMPT_COMMAND="$PROMPT_COMMAND; xtermtitle"
 

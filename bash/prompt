@@ -24,7 +24,7 @@ function ansi_fgseq {
 PS1_COLOR_U=$(ansi_fgseq green)
 PS1_COLOR_H=$(ansi_fgseq green)
 PS1_COLOR_W=$(ansi_fgseq blue)
-function baseprompt {
+function basicprompt {
   [[ "$(id -u)" != 0 ]] && local p_usr="\u@"
   [[ -n "$VIMRUNTIME" ]] && local p_vim="[vim] "
   if [[ -n "$LS_COLORS" ]]; then
@@ -69,12 +69,33 @@ function ps1_vcs {
     export PS1="\${BRANCH_PROMPT}${1:-$PS1}"; 
 }
 
-## Reset PS1 to baseprompt value
-function ps1_reset { export PS1="$(baseprompt)"; }
+## Set PS1 to value from basic_prompt
+function ps1_basic { export PS1="$(basicprompt)"; }
 
-## Prepend time to prompt
+## Prepend time to PS1
 function ps1_time { export PS1="[\t] ${1:-$PS1}"; }
 
-## Prepend history number to prompt
+## Prepend history number to PS1
 function ps1_hist { export PS1="[\!] ${1:-$PS1}"; }
+
+# Set termimal title from parameters
+function title { echo -ne "\033]2;$@\007"; }
+
+# Set terminal title from algorithm
+function longtitle { 
+    echo -ne "\033]0;${HOSTNAME%%.*}:${PWD/$HOME/~}\007"; 
+} 
+function shorttitle { 
+    local wd="${PWD/$HOME/~}"; 
+    local hn="${HOSTNAME%%.*}"; 
+    hn="${hn##*-}"; 
+    echo -ne "\033]0;${hn:0:4}:${wd##*/}\007"; 
+} 
+
+# Set title from PROMPT_COMMAND
+function autotitle {
+    if [[ $TERM == @(rxvt|xterm) ]]; then
+        export PROMPT_COMMAND="${PROMPT_COMMAND:-true}; ${1:-shorttitle}";
+    fi
+}
 
