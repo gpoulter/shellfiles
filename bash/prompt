@@ -63,6 +63,12 @@ function set_branch {
     [[ -n "$BRANCH_NAME" ]] && BRANCH_PROMPT="[$BRANCH_NAME] "
 }
 
+## Prepend version control branch to prompt
+function ps1_vcs { 
+    export PROMPT_COMMAND="${PROMPT_COMMAND:-true}; set_branch"
+    export PS1="\${BRANCH_PROMPT}${1:-$PS1}"; 
+}
+
 ## Reset PS1 to baseprompt value
 function ps1_reset { export PS1="$(baseprompt)"; }
 
@@ -72,8 +78,3 @@ function ps1_time { export PS1="[\t] ${1:-$PS1}"; }
 ## Prepend history number to prompt
 function ps1_hist { export PS1="[\!] ${1:-$PS1}"; }
 
-## Prepend version control branch to prompt
-function ps1_vcs { 
-    export PROMPT_COMMAND="${PROMPT_COMMAND:-true}; set_branch"
-    export PS1="\${BRANCH_PROMPT}${1:-$PS1}"; 
-}
