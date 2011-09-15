@@ -1,4 +1,5 @@
 # -*- sh -*-
+# vim: set sw=2
 
 ## Print ANSI attribute for some named foreground colors
 function ansi_fgcol {
@@ -15,7 +16,7 @@ function ansi_fgcol {
 
 # Print PS1 ANSI sequence for some named foreground color
 function ansi_fgseq {
-    echo "\[\033[$(ansi_fgcol $1)m\]"
+  echo "\[\033[$(ansi_fgcol $1)m\]"
 }
 
 # Print a string for PS1 with colors PS1_COLOR_U, PS1_COLOR_H and PS1_COLOR_W
@@ -28,9 +29,9 @@ function basicprompt {
   [[ "$(id -u)" != 0 ]] && local p_usr="\u@"
   [[ -n "$VIMRUNTIME" ]] && local p_vim="[vim] "
   if [[ -n "$LS_COLORS" ]]; then
-      echo "${p_vim}${PS1_COLOR_U}${p_usr}${PS1_COLOR_H}\h:${PS1_COLOR_W}\w\[\033[00m\]\\$ "
+    echo "${p_vim}${PS1_COLOR_U}${p_usr}${PS1_COLOR_H}\h:${PS1_COLOR_W}\w\[\033[00m\]\\$ "
   else
-      echo "${p_vim}${p_usr}\h:\w\\$ "
+    echo "${p_vim}${p_usr}\h:\w\\$ "
   fi
 }
 
@@ -38,46 +39,46 @@ function basicprompt {
 ## Only handles the vcs if its binary is found in $PATH
 ## Very fast. Avoids calling "bzr nick" because it can be very slow.
 function set_branch {
-    type -t cl_dirname &>/dev/null || alias cl_dirname=dirname
-    local dir="$PWD"
-    local vcs
-    while [[ "${dir}" != "/" ]]; do
-        for vcs in git hg svn bzr; do
-            if [[ -d "${dir}/.${vcs}" ]] && hash $vcs &>/dev/null; then
-                case ${vcs} in
-                    git)
-                        BRANCH=$(git branch 2>/dev/null \
-                            | sed -e '/^[^*]/d' -e 's/\* //');;
-                    hg)
-                        BRANCH=$(hg branch 2>/dev/null);;
-                    svn)
-                        BRANCH=$(svn info 2>/dev/null\
-                            | grep -e '^Repository Root:'\
-                            | sed -e 's#.*/##');;
-                    bzr)
-                        local conf="${dir}/.bzr/branch/branch.conf"
-                        if [[ -f ${conf} ]]; then
-                            BRANCH=$(grep -E '^nickname =' "${conf}"\
-                                    | cut -d' ' -f 3)
-                            if [[ -z $BRANCH ]]; then
-                                BRANCH=$(basename "${dir}")
-                            fi
-                        else
-                            unset BRANCH
-                        fi;;
-                esac
-                return 0
-            fi
-        done
-        dir="$(cl_dirname ${dir})"
+  type -t cl_dirname &>/dev/null || alias cl_dirname=dirname
+  local dir="$PWD"
+  local vcs
+  while [[ "${dir}" != "/" ]]; do
+    for vcs in git hg svn bzr; do
+      if [[ -d "${dir}/.${vcs}" ]] && hash $vcs &>/dev/null; then
+        case ${vcs} in
+          git)
+            BRANCH=$(git branch 2>/dev/null \
+              | sed -e '/^[^*]/d' -e 's/\* //');;
+          hg)
+            BRANCH=$(hg branch 2>/dev/null);;
+          svn)
+            BRANCH=$(svn info 2>/dev/null\
+              | grep -e '^Repository Root:'\
+              | sed -e 's#.*/##');;
+          bzr)
+            local conf="${dir}/.bzr/branch/branch.conf"
+            if [[ -f ${conf} ]]; then
+              BRANCH=$(grep -E '^nickname =' "${conf}"\
+                  | cut -d' ' -f 3)
+              if [[ -z $BRANCH ]]; then
+                BRANCH=$(basename "${dir}")
+              fi
+            else
+              unset BRANCH
+            fi;;
+        esac
+        return 0
+      fi
     done
-    unset BRANCH
+    dir="$(cl_dirname ${dir})"
+  done
+  unset BRANCH
 }
 
 ## Prepend version control branch to prompt
 function ps1_vcs {
-    export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND;} set_branch"
-    export PS1="\${BRANCH:+[\${BRANCH}] }${1:-$PS1}";
+  export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND;} set_branch"
+  export PS1="\${BRANCH:+[\${BRANCH}] }${1:-$PS1}";
 }
 
 ## Set PS1 to value from basic_prompt
@@ -94,19 +95,19 @@ function title { echo -ne "\033]2;$@\007"; }
 
 # Set terminal title from algorithm
 function title_long {
-    echo -ne "\033]0;${HOSTNAME%%.*}:${PWD/$HOME/~}\007";
+  echo -ne "\033]0;${HOSTNAME%%.*}:${PWD/$HOME/~}\007";
 }
 function title_reverse {
-    local wd="${PWD/$HOME/~}";
-    local hn="${HOSTNAME%%.*}";
-    hn="${hn##*-}";
-    echo -ne "\033]0;${wd}:${USER:0:1}@${hn:0:4}\007";
+  local wd="${PWD/$HOME/~}";
+  local hn="${HOSTNAME%%.*}";
+  hn="${hn##*-}";
+  echo -ne "\033]0;${wd}:${USER:0:1}@${hn:0:4}\007";
 }
 
 # Set title from PROMPT_COMMAND
 function autotitle {
-    if [[ $TERM == @(rxvt|xterm) ]]; then
-        export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND;} ${1:-title_reverse}";
-    fi
+  if [[ $TERM == @(rxvt|xterm) ]]; then
+    export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND;} ${1:-title_reverse}";
+  fi
 }
 
