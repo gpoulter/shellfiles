@@ -57,7 +57,7 @@ function branch {
             local conf="${dir}/.bzr/branch/branch.conf"
             if [[ -f $conf ]]; then
               nick=$(grep -E '^nickname =' "${conf}" | cut -d' ' -f 3)
-              [[ -z $nick ]] && nick=$(basename "${dir}")
+              [[ -z $nick ]] && nick=$(basename $(readlink -f "${dir}"))
             fi;;
         esac
         [[ -n $nick ]] && printf "${1:-(%s) }" "$nick"
