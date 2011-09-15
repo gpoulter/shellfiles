@@ -34,39 +34,50 @@ function basicprompt {
   fi
 }
 
-## Return git/hg/bzr/svn if in a branch, else empty string
-## Only returns a vcs if its binary is found in $PATH
-function vcs_type {
+## Detect git/hg/bzr/svn version control branch setting BRANCH
+## Only handles the vcs if its binary is found in $PATH
+## Very fast. Avoids calling "bzr nick" because it can be very slow.
+function set_branch {
     type -t cl_dirname &>/dev/null || alias cl_dirname=dirname
     local dir="$PWD"
     local vcs
     while [[ "${dir}" != "/" ]]; do
         for vcs in git hg svn bzr; do
-            [[ -d "${dir}/.${vcs}" ]] && hash $vcs &>/dev/null && { echo $vcs; return 0; }
+            if [[ -d "${dir}/.${vcs}" ]] && hash $vcs &>/dev/null; then
+                case ${vcs} in
+                    git)
+                        BRANCH=$(git branch 2>/dev/null \
+                            | sed -e '/^[^*]/d' -e 's/\* //');;
+                    hg)
+                        BRANCH=$(hg branch 2>/dev/null);;
+                    svn)
+                        BRANCH=$(svn info 2>/dev/null\
+                            | grep -e '^Repository Root:'\
+                            | sed -e 's#.*/##');;
+                    bzr)
+                        local conf="${dir}/.bzr/branch/branch.conf"
+                        if [[ -f ${conf} ]]; then
+                            BRANCH=$(grep -E '^nickname =' "${conf}"\
+                                    | cut -d' ' -f 3)
+                            if [[ -z $BRANCH ]]; then
+                                BRANCH=$(basename "${dir}")
+                            fi
+                        else
+                            unset BRANCH
+                        fi;;
+                esac
+                return 0
+            fi
         done
         dir="$(cl_dirname ${dir})"
     done
-}
-
-## Detect version control branch setting BRANCH_DIR, BRANCH_NAME, BRANCH_PROMPT
-## Very fast except for calling "bzr nick" on cd into a Bazaar branch
-function set_branch {
-    case $(vcs_type) in
-        git) BRANCH_NAME="$(git branch 2>/dev/null | sed -e '/^[^*]/d' -e 's/\* //')";;
-        hg) BRANCH_NAME="$(hg branch 2>/dev/null)";;
-        svn) BRANCH_NAME="$(svn info 2>/dev/null | grep -e '^Repository Root:' | sed -e 's#.*/##')";;
-        bzr) [[ $PWD != $BRANCH_DIR ]] && BRANCH_NAME="$(bzr nick 2>/dev/null)";;
-        *) BRANCH_NAME="";;
-    esac
-    BRANCH_DIR="$PWD"
-    BRANCH_PROMPT=""
-    [[ -n "$BRANCH_NAME" ]] && BRANCH_PROMPT="[$BRANCH_NAME] "
+    unset BRANCH
 }
 
 ## Prepend version control branch to prompt
-function ps1_vcs { 
+function ps1_vcs {
     export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND;} set_branch"
-    export PS1="\${BRANCH_PROMPT}${1:-$PS1}"; 
+    export PS1="\${BRANCH:+[\${BRANCH}] }${1:-$PS1}";
 }
 
 ## Set PS1 to value from basic_prompt
@@ -84,13 +95,13 @@ function title { echo -ne "\033]2;$@\007"; }
 # Set terminal title from algorithm
 function title_long {
     echo -ne "\033]0;${HOSTNAME%%.*}:${PWD/$HOME/~}\007";
-} 
+}
 function title_reverse {
     local wd="${PWD/$HOME/~}";
     local hn="${HOSTNAME%%.*}";
     hn="${hn##*-}";
     echo -ne "\033]0;${wd}:${USER:0:1}@${hn:0:4}\007";
-} 
+}
 
 # Set title from PROMPT_COMMAND
 function autotitle {
