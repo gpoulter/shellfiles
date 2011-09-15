@@ -35,50 +35,42 @@ function basicprompt {
   fi
 }
 
-## Detect git/hg/bzr/svn version control branch setting BRANCH
-## Only handles the vcs if its binary is found in $PATH
-## Very fast. Avoids calling "bzr nick" because it can be very slow.
-function set_branch {
+## Detect git/hg/bzr/svn version control and if available
+## output printf formatted string of branch to include in PS1.  
+## Example: branch "(%s) " 
+## Very fast, avoids "bzr nick" and most external commands.
+function branch {
   type -t cl_dirname &>/dev/null || alias cl_dirname=dirname
   local dir="$PWD"
   local vcs
-  while [[ "${dir}" != "/" ]]; do
+  local nick
+  while [[ $dir != "/" ]]; do
     for vcs in git hg svn bzr; do
       if [[ -d "${dir}/.${vcs}" ]] && hash $vcs &>/dev/null; then
         case ${vcs} in
-          git)
-            BRANCH=$(git branch 2>/dev/null \
-              | sed -e '/^[^*]/d' -e 's/\* //');;
-          hg)
-            BRANCH=$(hg branch 2>/dev/null);;
-          svn)
-            BRANCH=$(svn info 2>/dev/null\
-              | grep -e '^Repository Root:'\
-              | sed -e 's#.*/##');;
+          git) __git_ps1 "${1:-(%s) }"; return;;
+          hg) nick=$(hg branch 2>/dev/null);;
+          svn) nick=$(svn info 2>/dev/null\
+                | grep -e '^Repository Root:'\
+                | sed -e 's#.*/##');;
           bzr)
             local conf="${dir}/.bzr/branch/branch.conf"
-            if [[ -f ${conf} ]]; then
-              BRANCH=$(grep -E '^nickname =' "${conf}"\
-                  | cut -d' ' -f 3)
-              if [[ -z $BRANCH ]]; then
-                BRANCH=$(basename "${dir}")
-              fi
-            else
-              unset BRANCH
+            if [[ -f $conf ]]; then
+              nick=$(grep -E '^nickname =' "${conf}" | cut -d' ' -f 3)
+              [[ -z $nick ]] && nick=$(basename "${dir}")
             fi;;
         esac
+        [[ -n $nick ]] && printf "${1:-(%s) }" "$nick"
         return 0
       fi
     done
     dir="$(cl_dirname ${dir})"
   done
-  unset BRANCH
 }
 
 ## Prepend version control branch to prompt
 function ps1_vcs {
-  export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND;} set_branch"
-  export PS1="\${BRANCH:+[\${BRANCH}] }${1:-$PS1}";
+  export PS1="\$(branch)${1:-$PS1}";
 }
 
 ## Set PS1 to value from basic_prompt
