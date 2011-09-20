@@ -54,11 +54,11 @@ function branch {
                 | grep -e '^Repository Root:'\
                 | sed -e 's#.*/##');;
           bzr)
-            local conf="${dir}/.bzr/branch/branch.conf"
-            if [[ -f $conf ]]; then
-              nick=$(grep -E '^nickname =' "${conf}" | cut -d' ' -f 3)
-              [[ -z $nick ]] && nick=$(basename $(readlink -f "${dir}"))
-            fi;;
+            local conf="${dir}/.bzr/branch/branch.conf" # normal branch
+            [[ -f $conf ]] && nick=$(grep -E '^nickname =' $conf | cut -d' ' -f 3)
+            conf="${dir}/.bzr/branch/location" # colo/lightweight branch
+            [[ -f $conf ]] && nick=$(basename $(cat $conf))
+            [[ -z $nick ]] && nick=$(basename $(readlink -f $dir))
         esac
         [[ -n $nick ]] && printf "${1:-(%s) }" "$nick"
         return 0
