@@ -1,8 +1,20 @@
 # -*- sh -*-
 
+# What services are running here
+alias whatsopen="sudo nmap -sS -O 127.0.0.1"
+# Nice process listing
+alias psx="ps hwwaxfo pid,uname,nice,bsdstart,bsdtime,pcpu,pmem,rss,cmd"
+# Get full/absolute path to $1
+alias abspath='readlink -f'
+# Convenience for apt-get
+alias can-has="sudo apt-get install"
+## Display top processes by memory usage
+alias pmem='ps aux | sort -nk +4 | tail'
+
 ## Shortcut for awk evaluation: c 3+5/8, c '(3+5)*2'
 function c { awk "BEGIN{ print $* }" ;}
 function bce { echo "scale=4; $*" | bc; }
+
 ## Concalc calculator
 # concalc<<<'sin(32^(1/3))'
 ## Bash integer arithmetic
@@ -11,15 +23,6 @@ function bce { echo "scale=4; $*" | bc; }
 # bc -l<<<3/7
 ## Using pari-gp
 # gp -qf<<<'123456! + 0.'   
-
-## Get full/absolute path to $1
-alias abspath='readlink -f'
-
-## Use emacsclient
-alias eclient="emacsclient -n -a emacs"
-
-## Convenience for apt-get
-alias can-has="sudo apt-get install"
 
 ## Get a text wiki summary over DNS
 function wiki { dig +short txt $1.wp.dg.cx; }
@@ -43,11 +46,6 @@ if which -v 2>&1 | grep -q GNU; then
     function md { mkdir -p "$@" && cd "$@"; }
     alias which='alias | /usr/bin/which --tty-only --read-alias --show-dot --show-tilde'
 fi
-
-## Display top-10 processes by memory usage
-function psmem10 {
-    ps aux | sort -nk +4 | tail "$@"
-}
 
 ## Confirm for cp/mv/rm
 function careful {
@@ -118,15 +116,11 @@ function urlunquote { python -c "import urllib; print urllib.unquote_plus(\"$*\"
 ## Learn what the commands are in a directory
 function learn { ls $1 | xargs whatis | grep -v nothing | less; }
 
-## What services are running here
-function whatsopen { sudo nmap -sS -O 127.0.0.1; }
-
 # Prints out the number of non-blank lines in the given files, with whitespace and wc counts 
 function gsloc {
     cat $* | awk 'BEGIN { count = 0; space = 0; } { \
-if(match($0,"[0-9a-zA-z]+")) { count++; } else { space++; } } 
-END { printf("LOC:  %d\nSPACE: %d\n",count,space); }'
+        if(match($0,"[0-9a-zA-z]+")) { count++; } else { space++; } }
+        END { printf("LOC:  %d\nSPACE: %d\n",count,space); }'
 }
 
-function psx { ps hwwaxfo "pid,uname,nice,bsdstart,bsdtime,pcpu,pmem,rss,cmd"; }
 
