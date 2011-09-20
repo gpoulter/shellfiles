@@ -22,9 +22,6 @@ function ansi_fgseq {
 # Print a string for PS1 with colors PS1_COLOR_U, PS1_COLOR_H and PS1_COLOR_W
 # Prefix with [vim] if VIMRUNTIME is set
 # Prefixes with user name for non-root users
-PS1_COLOR_U=$(ansi_fgseq green)
-PS1_COLOR_H=$(ansi_fgseq green)
-PS1_COLOR_W=$(ansi_fgseq blue)
 function basicprompt {
   [[ "$(id -u)" != 0 ]] && local p_usr="\u@"
   [[ -n "$VIMRUNTIME" ]] && local p_vim="[vim] "
@@ -75,6 +72,14 @@ function ps1_vcs {
 
 ## Set PS1 to value from basic_prompt
 function ps1_basic { export PS1="$(basicprompt)"; }
+
+# Use ansi_fgseq and basicprompt to set prompt colors from names
+function ps1_colors {
+  PS1_COLOR_U=$(ansi_fgseq $1)
+  PS1_COLOR_H=$(ansi_fgseq $2)
+  PS1_COLOR_W=$(ansi_fgseq $3)
+  ps1_basic
+}
 
 ## Prepend time to PS1
 function ps1_time { export PS1="[\t] ${1:-$PS1}"; }
