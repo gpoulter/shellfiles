@@ -24,17 +24,6 @@ function be_history_env {
     shopt -u histverify # Immediately execute history sub
 }
 
-## Shell options
-function be_shopt {
-    shopt -s cdspell      # Correct spelling
-    shopt -s checkhash    # Look up commands
-    shopt -s checkwinsize # Update LINES and COLUMNS after each command
-    shopt -s extglob      # Pattern-matching glob features
-    shopt -u dotglob      # Do not include .config files in normal glob
-    shopt -u failglob     # Don't fail on nomatch, just leave the *'s in
-    shopt -u nullglob     # Don't go to null on nomatch, just leave the *'s in
-}
-
 ## History commands
 
 # Today's history
@@ -60,7 +49,3 @@ function history_prompt_command { history -a; lastcmd >> ~/.history; history -n;
 
 # Append to history on displaying next prompt
 function be_history_prompt { export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND;} history_prompt_command"; }
-
-be_history_env
-be_shopt
-be_history_prompt

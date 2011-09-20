@@ -14,16 +14,8 @@ function be_ls_aliases {
     alias lld='ls -dlU */' # list directories
 }
 
-## Up-directory aliases
-function be_cd_aliases {
-    alias ..="cd .."
-    alias ...="cd ../.."
-    alias ....="cd ../../.."
-    alias -- -="cd -"
-}
-
 ## Directory listing colours
-function be_colors {
+function be_ls_colors {
     if [[ -f "$(type -p dircolors)" ]]; then
         if [[ -f "~/.dircolors" ]]; then
             eval $(dircolors -b "~/.dircolors")
@@ -31,8 +23,7 @@ function be_colors {
             eval $(dircolors -b)
         fi
     fi
-
-## Colorize grep
+    ## Colorize grep
     if [[ -n "$LS_COLORS" ]]; then
         export GREP_OPTIONS="--color=auto"
     fi
@@ -47,7 +38,3 @@ function colorpreview {
    ) | tr : '\n' |
    sed 's/\([^=]*\)=\(.*\)/\x1b[\2m\1\x1b[0m\t\2/'
 }
-
-be_ls_aliases
-be_cd_aliases
-be_colors

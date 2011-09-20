@@ -1,0 +1,35 @@
+## Shell options
+function be_shopt {
+    shopt -s cdspell      # Correct spelling
+    shopt -s checkhash    # Look up commands
+    shopt -s checkwinsize # Update LINES and COLUMNS after each command
+    shopt -s extglob      # Pattern-matching glob features
+    shopt -u dotglob      # Do not include .config files in normal glob
+    shopt -u failglob     # Don't fail on nomatch, just leave the *'s in
+    shopt -u nullglob     # Don't go to null on nomatch, just leave the *'s in
+}
+
+## Up-directory aliases
+function be_cdalias {
+    alias ..="cd .."
+    alias ...="cd ../.."
+    alias ....="cd ../../.."
+    alias -- -="cd -"
+}
+
+## Pager options
+function be_less {
+    export PAGER=less
+    export LESS='--LONG-PROMPT --RAW-CONTROL-CHARS'
+    alias le='less -R' # interpret ascii codes
+    alias v='less -R'  # shorter than even 'le'
+}
+
+## Use hless for syntax highlighting
+if [[ -x "$(type -p source-highlight)" ]]; then
+    function hless() {
+        INFILE="$1"; shift
+        source-highlight --out-format=esc --style-file=$HOME/.esc.style --output=STDOUT --input="$INFILE" "$@" | less -R;
+    }
+fi
+
