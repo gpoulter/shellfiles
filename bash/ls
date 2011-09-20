@@ -1,37 +1,42 @@
-## ls aliases
-alias ls='ls --color=auto'  # colorize listing
-alias l='ls -CF'       # short listing
-alias L='ls -lF'       # short listing
-alias ll='ls -lF'      # long listing
-alias la='ls -alF'     # list all files
-alias lla='ls -alF'    # list all files
-alias lt='ls -lhvrtF'  # long listing by reverse time
-alias l.='ls -ld .*'   # dotfiles only
-alias l1='ls -1F'      # one file per line
-alias lr='ls -R'       # recursive listing
-alias llr='ls -alR'    # all-inclusive recurse
-alias lR='ls -alR'     # all-inclusive recurse
-alias lld='ls -dlU */' # list directories
+function be_ls_aliases {
+    alias ls='ls --color=auto'  # colorize listing
+    alias l='ls -CF'       # short listing
+    alias L='ls -lF'       # short listing
+    alias ll='ls -lF'      # long listing
+    alias la='ls -alF'     # list all files
+    alias lla='ls -alF'    # list all files
+    alias lt='ls -lhvrtF'  # long listing by reverse time
+    alias l.='ls -ld .*'   # dotfiles only
+    alias l1='ls -1F'      # one file per line
+    alias lr='ls -R'       # recursive listing
+    alias llr='ls -alR'    # all-inclusive recurse
+    alias lR='ls -alR'     # all-inclusive recurse
+    alias lld='ls -dlU */' # list directories
+}
 
 ## Up-directory aliases
-alias ..="cd .."
-alias ...="cd ../.."
-alias ....="cd ../../.."
-alias -- -="cd -"
+function be_cd_aliases {
+    alias ..="cd .."
+    alias ...="cd ../.."
+    alias ....="cd ../../.."
+    alias -- -="cd -"
+}
 
 ## Directory listing colours
-if [[ -f "$(type -p dircolors)" ]]; then
-    if [[ -f "~/.dircolors" ]]; then
-        eval $(dircolors -b "~/.dircolors")
-    else
-        eval $(dircolors -b)
+function be_colors {
+    if [[ -f "$(type -p dircolors)" ]]; then
+        if [[ -f "~/.dircolors" ]]; then
+            eval $(dircolors -b "~/.dircolors")
+        else
+            eval $(dircolors -b)
+        fi
     fi
-fi
 
 ## Colorize grep
-if [[ -n "$LS_COLORS" ]]; then
-    export GREP_OPTIONS="--color=auto"
-fi
+    if [[ -n "$LS_COLORS" ]]; then
+        export GREP_OPTIONS="--color=auto"
+    fi
+}
 
 ## Preview of what LS_COLORS will do
 function colorpreview {
@@ -43,3 +48,6 @@ function colorpreview {
    sed 's/\([^=]*\)=\(.*\)/\x1b[\2m\1\x1b[0m\t\2/'
 }
 
+be_ls_aliases
+be_cd_aliases
+be_colors
