@@ -17,6 +17,7 @@ function be_cdalias {
     alias ...="cd ../.."
     alias ....="cd ../../.."
     alias -- -="cd -"
+    alias -- ~="cd ~"
 }
 
 ## Pager options
