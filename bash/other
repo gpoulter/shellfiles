@@ -1,5 +1,7 @@
 ## Shell options
 function be_shopt {
+    # Do not glob . or .. when using .*
+    export GLOBIGNORE='.:..'
     shopt -s cdspell      # Correct spelling
     shopt -s checkhash    # Look up commands
     shopt -s checkwinsize # Update LINES and COLUMNS after each command

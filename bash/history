@@ -1,13 +1,4 @@
 function be_history_env {
-    # Long session history (default is 500)
-    export HISTSIZE=20000
-
-    # Long history file (default is 500)
-    export HISTFILESIZE=100000
-
-    # Do not glob . or .. when using .*
-    export GLOBIGNORE='.:..'
-
     # Timestamp the history entries (important!!)
     export HISTTIMEFORMAT="%Y-%m-%d %T "
 
