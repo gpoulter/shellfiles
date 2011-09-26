@@ -97,8 +97,7 @@ function title_long {
 function title_reverse {
   local wd="${PWD/$HOME/~}";
   local hn="${HOSTNAME%%.*}";
-  hn="${hn##*-}";
-  echo -ne "\033]0;${wd}:${USER:0:1}@${hn:0:4}\007";
+  echo -ne "\033]0;${wd}:${USER:0:1}@${hn}\007";
 }
 
 # Set title from PROMPT_COMMAND
