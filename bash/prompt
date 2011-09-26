@@ -43,7 +43,6 @@ function branch {
   local nick
   while [[ "$dir" != "/" ]]; do
     for vcs in git hg svn bzr; do
-      return
       if [[ -d "$dir/.$vcs" ]] && hash "$vcs" &>/dev/null; then
         case "$vcs" in
           git) __git_ps1 "${1:-(%s) }"; return;;
