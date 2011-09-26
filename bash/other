@@ -68,3 +68,9 @@ if [[ -x "$(type -p source-highlight)" ]]; then
     }
 fi
 
+## Integrate "other" options
+function be_other {
+    be_shopt
+    be_aliases
+    be_colors
+}
