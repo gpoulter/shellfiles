@@ -1,17 +1,15 @@
 function be_ls_aliases {
-    alias ls='ls --color=auto'  # colorize listing
-    alias l='ls -CF'       # short listing
-    alias L='ls -lF'       # short listing
-    alias ll='ls -lF'      # long listing
-    alias la='ls -alF'     # list all files
-    alias lla='ls -alF'    # list all files
-    alias lt='ls -lhvrtF'  # long listing by reverse time
-    alias l.='ls -ld .*'   # dotfiles only
-    alias l1='ls -1F'      # one file per line
-    alias lr='ls -R'       # recursive listing
-    alias llr='ls -alR'    # all-inclusive recurse
-    alias lR='ls -alR'     # all-inclusive recurse
-    alias lld='ls -dlU */' # list directories
+    alias ls='ls --color=auto'  # colorize
+    alias ll='ls -alF'     # long:all (ubuntu)
+    alias la='ls -A'       # short:almost-all (ubuntu)
+    alias l='ls -CF'       # short:visible (ubuntu)
+    alias lr='ls -R'       # short:recursive
+    alias l1='ls -1F'      # short:oneperline:visible
+    alias lu='ls -lF'      # long:visible
+    alias lt='ls -lhvrtF'  # long:visible:timesort:reverse
+    alias l.='ls -ldF .*'  # long:dotfiles
+    alias llr='ls -alR'    # longall:recursive
+    alias ly='ls -dl -- */'  # long:directories
 }
 
 ## Directory listing colours
