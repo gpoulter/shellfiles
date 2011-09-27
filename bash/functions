@@ -1,19 +1,8 @@
 # -*- sh -*-
 
-# What services are running here
-alias whatsopen="sudo nmap -sS -O 127.0.0.1"
-# Nice process listing
-alias psx="ps hwwaxfo pid,uname,nice,bsdstart,bsdtime,pcpu,pmem,rss,cmd"
-# Get full/absolute path to $1
-alias abspath='readlink -f'
-# Convenience for apt-get
-alias can-has="sudo apt-get install"
-## Display top processes by memory usage
-alias pmem='ps aux | sort -nk +4 | tail'
-
-## Shortcut for awk evaluation: c 3+5/8, c '(3+5)*2'
-function c { awk "BEGIN{ print $* }" ;}
-function bce { echo "scale=4; $*" | bc; }
+## Shortcut for awk evaluation: 3+5/8, '(3+5)*2'
+function be_awkeval { awk "BEGIN{ print $* }" ;}
+function be_bceval { echo "scale=4; $*" | bc; }
 
 ## Concalc calculator
 # concalc<<<'sin(32^(1/3))'
@@ -22,105 +11,88 @@ function bce { echo "scale=4; $*" | bc; }
 ## Arbitrary-precision calculator
 # bc -l<<<3/7
 ## Using pari-gp
-# gp -qf<<<'123456! + 0.'   
+# gp -qf<<<'123456! + 0.'
 
 ## Get a text wiki summary over DNS
-function wiki { dig +short txt $1.wp.dg.cx; }
+function be_wiki { dig +short txt $1.wp.dg.cx; }
 
 ## Make directory and change into it
-function mkcd { [[ -n "$1" ]] && mkdir -p "$@" && cd "$1"; }
-
-## Search Command-Line Fu for $@
-function cmdfu { curl "http://www.commandlinefu.com/commands/matching/$@/$(echo -n $@ | openssl base64)/plaintext"; }
+function be_mkcd { [[ -n $1 ]] && [[ -e $1 ]] || mkdir -p $1 && cd $1; }
 
 ## Search Google for $@
-function google { curl -A Mozilla http://www.google.com/search?q=$@ | html2text -width 80; }
+function be_google { curl -A Mozilla http://www.google.com/search?q=$@ | html2text -width 80; }
 
-## Colourful 'grep' for $@
-function cgrep {
-    grep --line-number --color=always "$@" | less -R;
-}
+## Colourful 'grep' for $@ with paging
+function be_cgrep { grep --line-number --color=always "$@" | less -R; }
 
-## Redefine 'which' to include aliases
-if which -v 2>&1 | grep -q GNU; then
-    function md { mkdir -p "$@" && cd "$@"; }
-    alias which='alias | /usr/bin/which --tty-only --read-alias --show-dot --show-tilde'
-fi
-
-## Confirm for cp/mv/rm
-function careful {
+## Confirm for cp/mv/rm/crontab
+function be_careful {
     if [[ "$1" == "off" ]]; then
-        unalias rm cp mv
+        unalias rm cp mv crontab
         echo "rm, cp and mv are now non-interactive."
     else
-        alias rm="rm -i"; alias cp="cp -i"; alias mv="mv -i"
-        echo "rm, cp, and mv are now interactive."
+        alias rm="rm -i"
+        alias cp="cp -i"
+        alias mv="mv -i"
+        alias crontab="crontab -i"
+        echo "rm, cp, mv, crontab are now interactive."
     fi
 }
 
+## Use hless for syntax highlighting
+if [[ -n "$LS_COLORS" ]] && [[ -x "$(type -p source-highlight)" ]]; then
+    function be_hiless() {
+        INFILE="$1"; shift
+        source-highlight --out-format=esc --style-file=$HOME/.esc.style --output=STDOUT --input="$INFILE" "$@" | less -R;
+    }
+fi
+
 ## Removed tilde-files found under $1
-function rmtilde() {
-    [[ "$1" == "-h" ]] || [[ -z "$1" ]] && { echo "Usage: rmtilde <top-directory>"; return; }
-    echo "Removing tilde-backup files under $1"
-    find "$1" -name '*~' -print -delete
-}
+function be_rmtilde { [[ -d "$1" ]] && find "$1" -name '*~' -print -delete; }
 
 ## Call $@ every $1 seconds
-function watchnlog {
-    [[ "$1" == "-h" ]] || [[ -z "$1" ]] && { echo "Usage: watchnlog <sleep> <command-line>"; return; }
-    local SLEEPLEN=$1; shift
+function be_watch {
+    local seconds=$1
+    shift
     while true; do
         { date '+[%Y-%m-%d %H:%M:%S]'; "$@"; echo; }
-        sleep $SLEEPLEN || return
+        sleep $seconds || return
     done
 }
 
-## Cat all files under $1, having name $2, printing first $3 lines.
-function catemall {
-    [[ "$1" == "-h" ]] || [[ -z "$1"  ]] && { echo "Usage: catemall <top-directory> <file-name> <lines>"; return; }
-    local TOP="$1"; local FNAME="$2"; local LINES="$3"
-    local catcmd="cat"
-    [[ -n "$LINES" ]] && catcmd="head -n $LINES"
-    find "$TOP" -xdev -name '.bzr' -prune -o -name "$FNAME" -printf "\n## %p (%s) [%t]\n" -exec $catcmd {} \;
+## Functions to import new SSH vars into old screen sessions
+function be_ssh_vars {
+    for x in SSH_CLIENT SSH_TTY SSH_AUTH_SOCK SSH_CONNECTION DISPLAY; do
+        (eval echo $x=\$$x) | sed 's/=/=\"/; s/$/\"/; s/^/export /'
+    done 
 }
-
-## Import SSH agent environment into existing screen session
-if [[ -x "$(type -p screen)" ]]; then
-    function grabssh {
-        SSHVARS="SSH_CLIENT SSH_TTY SSH_AUTH_SOCK SSH_CONNECTION DISPLAY"
-        for x in ${SSHVARS} ; do
-            (eval echo $x=\$$x) | sed  's/=/="/
-                                       s/$/"/
-                                       s/^/export /'
-        done
-    }
-    alias screen_attach='grabssh > $HOME/.fixssh; screen -d -R'
-    alias screen_fixssh='source $HOME/.fixssh'
-fi
+function be_ssh_save { be_ssh_vars > $HOME/.ssh/environ; }
+function be_ssh_restore { source $HOME/.ssh/environ; }
 
 ## Get geographic location for IP address
-function geoip {
-    IP="$1"
-    if [[ -z "$1" ]]; then
-       IP=$(curl -s icanhazip.com)
-    fi
+function be_geoip {
+    IP=$1; [[ -z $IP ]] && IP=$(curl -s icanhazip.com)
     curl -s "http://www.geody.com/geoip.php?ip=$IP" | sed '/^IP:/!d;s/<[^>][^>]*>//g'
 }
 
 ## Quote URL parameters using Python
-function urlquote { python -c "import urllib; print urllib.quote_plus(\"$*\")"; }
+function be_urlquote { python -c "import urllib; print urllib.quote_plus(\"$*\")"; }
 
 ## Quote URL parameters using Python
-function urlunquote { python -c "import urllib; print urllib.unquote_plus(\"$*\")"; }
+function be_urlunquote { python -c "import urllib; print urllib.unquote_plus(\"$*\")"; }
 
 ## Learn what the commands are in a directory
-function learn { ls $1 | xargs whatis | grep -v nothing | less; }
+function be_learn { ls $1 | xargs whatis | grep -v nothing | less; }
 
-# Prints out the number of non-blank lines in the given files, with whitespace and wc counts 
-function gsloc {
+# Prints out the number of non-blank lines in the given files, with whitespace and wc counts
+function be_sloc {
     cat $* | awk 'BEGIN { count = 0; space = 0; } { \
         if(match($0,"[0-9a-zA-z]+")) { count++; } else { space++; } }
         END { printf("LOC:  %d\nSPACE: %d\n",count,space); }'
 }
 
-
+function be_setall_funcalias {
+    alias ke=be_awkeval
+    alias bce=be_bceval
+    alias hless=be_hiless
+}
