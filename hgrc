@@ -16,3 +16,5 @@ cmd.meld = meld
 [ui]
 askusername = True
 
+[alias]
+h = help
