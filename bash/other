@@ -1,6 +1,6 @@
 ## Listing, cd, pager aliases
-function be_aliases {
-    alias ls='ls --color=auto'  # colorize
+function be_set_lsaliases {
+    alias ls='ls --color=auto'  # colorize (ubuntu)
     alias ll='ls -alF'     # long:all (ubuntu)
     alias la='ls -A'       # short:almost-all (ubuntu)
     alias l='ls -CF'       # short:visible (ubuntu)
@@ -9,36 +9,47 @@ function be_aliases {
     alias lu='ls -lF'      # long:visible
     alias lt='ls -lhvrtF'  # long:visible:timesort:reverse
     alias l.='ls -ldF .*'  # long:dotfiles
-    alias llr='ls -alR'    # longall:recursive
+    alias llr='ls -alR'    # long:all:recursive
     alias ly='ls -dl -- */'  # long:directories
     alias ..="cd .."
     alias ...="cd ../.."
     alias ....="cd ../../.."
     alias -- -="cd -"
     alias -- ~="cd ~"
-    export PAGER=less
-    export LESS='--LONG-PROMPT --RAW-CONTROL-CHARS'
-    alias le='less -R' # interpret ascii codes
-    alias v='less -R'  # shorter than even 'le'
 }
 
-## Directory listing colours
-function be_colors {
-    if [[ -f "$(type -p dircolors)" ]]; then
+## Set extra aliases
+function be_set_aliases {
+    export PAGER=less
+    export LESS='--LONG-PROMPT --RAW-CONTROL-CHARS'
+# Pager, interpreting ascii codes
+    alias p='less -R'
+# What services are running here
+    alias whatsopen="sudo nmap -sS -O 127.0.0.1"
+# Nice process listing
+    alias psx="ps hwwaxfo pid,uname,nice,bsdstart,bsdtime,pcpu,pmem,rss,cmd"
+# Get full/absolute path to $1
+    alias abspath='readlink -f'
+# Convenience for apt-get
+    alias can-has="sudo apt-get install"
+# Display top processes by memory usage
+    alias pmem='ps aux | sort -nk +4 | tail'
+}
+
+## Set colors for directory listing 
+function be_set_dircolors {
+    if hash dircolors &>/dev/null; then
         if [[ -f "~/.dircolors" ]]; then
             eval $(dircolors -b "~/.dircolors")
         else
             eval $(dircolors -b)
         fi
     fi
-    ## Colorize grep
-    if [[ -n "$LS_COLORS" ]]; then
-        export GREP_OPTIONS="--color=auto"
-    fi
+    [[ -n "$LS_COLORS" ]] && export GREP_OPTIONS="--color=auto"
 }
 
-## Preview of what LS_COLORS will do
-function colorpreview {
+## Display legend for LS_COLORS 
+function be_colorpreview {
    (
        [[ "$LS_COLORS" ]] || eval $(dircolors)
        [[ "$LS_COLORS" ]] || eval $(TERM=xterm dircolors)
@@ -47,9 +58,8 @@ function colorpreview {
    sed 's/\([^=]*\)=\(.*\)/\x1b[\2m\1\x1b[0m\t\2/'
 }
 
-## Shell options
-function be_shopt {
-    # Do not glob . or .. when using .*
+## Set shell options
+function be_set_shopts {
     export GLOBIGNORE='.:..'
     shopt -s cdspell      # Correct spelling
     shopt -s checkhash    # Look up commands
@@ -60,17 +70,33 @@ function be_shopt {
     shopt -u nullglob     # Don't go to null on nomatch, just leave the *'s in
 }
 
-## Use hless for syntax highlighting
-if [[ -x "$(type -p source-highlight)" ]]; then
-    function hless() {
-        INFILE="$1"; shift
-        source-highlight --out-format=esc --style-file=$HOME/.esc.style --output=STDOUT --input="$INFILE" "$@" | less -R;
-    }
-fi
+# Set terminal title to $@
+function be_set_title { echo -ne "\033]2;$@\007"; }
+
+# Set long terminal title 
+function be_set_longtitle {
+  echo -ne "\033]0;${HOSTNAME%%.*}:${PWD/$HOME/~}\007";
+}
+
+# Set short terminal title 
+function be_set_shorttitle {
+  local wd="${PWD/$HOME/~}";
+  local hn="${HOSTNAME%%.*}";
+  echo -ne "\033]0;${wd}:${USER:0:1}@${hn}\007";
+}
+
+# Set title on each command by calling $1
+function be_set_titlecmd {
+  if [[ $TERM == @(rxvt|xterm) ]]; then
+    export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND;} ${1:-be_set_shorttitle}";
+  fi
+}
 
 ## Integrate "other" options
-function be_other {
-    be_shopt
-    be_aliases
-    be_colors
+function be_setall_other {
+    be_set_shopts
+    be_set_dircolors
+    be_set_lsaliases
+    be_set_aliases
+    be_set_titlecmd
 }
