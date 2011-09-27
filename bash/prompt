@@ -2,7 +2,7 @@
 # vim: set sw=2
 
 ## Print ANSI attribute for some named foreground colors
-function ansi_fgcol {
+function be_get_ansicolor {
   case $1 in
     red) echo "01;31" ;;
     green) echo "01;32" ;;
@@ -14,30 +14,44 @@ function ansi_fgcol {
   esac
 }
 
-# Print PS1 ANSI sequence for some named foreground color
-function ansi_fgseq {
-  echo "\[\033[$(ansi_fgcol $1)m\]"
+# Generate PS1 ANSI sequence for some named foreground color
+function be_get_ansiseq {
+  echo "\[\033[$(be_get_ansicolor $1)m\]"
 }
 
-# Print a string for PS1 with colors PS1_COLOR_U, PS1_COLOR_H and PS1_COLOR_W
-# Prefix with [vim] if VIMRUNTIME is set
-# Prefixes with user name for non-root users
-function basicprompt {
+# Generate string for PS1, with colors based on BE_PS1_ vars
+# Prefix string with [vim] if VIMRUNTIME is set
+# Prefixe string with user name for non-root
+function be_make_prompt {
   [[ "$(id -u)" != 0 ]] && local p_usr="\u@"
   [[ -n "$VIMRUNTIME" ]] && local p_vim="[vim] "
   if [[ -n "$LS_COLORS" ]]; then
-    echo "${p_vim}${PS1_COLOR_U}${p_usr}${PS1_COLOR_H}\h:${PS1_COLOR_W}\w\[\033[00m\]\\$ "
+    echo "${p_vim}${BE_PS1_UCOLOR}${p_usr}${BE_PS1_HCOLOR}\h:${BE_PS1_WCOLOR}\w\[\033[00m\]\\$ "
   else
     echo "${p_vim}${p_usr}\h:\w\\$ "
   fi
 }
 
-## Detect git/hg/bzr/svn version control and if available
-## output printf formatted string of branch to include in PS1.  
-## Example: branch "(%s) " 
-## Very fast, avoids "bzr nick" and most external commands.
-function branch {
-  type -t cl_dirname &>/dev/null || alias cl_dirname=dirname
+## Set PS1 to value from basic_prompt
+function be_set_baseprompt { export PS1="$(be_make_prompt)"; }
+
+## Set PS1 with colornames for user, host, workdir
+function be_set_colorprompt {
+  export BE_PS1_UCOLOR=$(be_get_ansiseq $1)
+  export BE_PS1_HCOLOR=$(be_get_ansiseq $2)
+  export BE_PS1_WCOLOR=$(be_get_ansiseq $3)
+  be_set_baseprompt
+}
+
+## Prepend time to PS1
+function be_add_timeprompt { export PS1="[\t] ${1:-$PS1}"; }
+
+## Prepend history number to PS1
+function be_add_histprompt { export PS1="[\!] ${1:-$PS1}"; }
+
+## Print nickname for git/hg/bzr/svn version control in CWD
+## Optional $1 of format string for printf, default "(%s) "
+function be_get_branch {
   local dir="$PWD"
   local vcs
   local nick
@@ -61,49 +75,18 @@ function branch {
         return 0
       fi
     done
-    dir="$(cl_dirname ${dir})"
+    dir="$(dirname ${dir})"
   done
 }
 
-## Prepend version control branch to prompt
-function ps1_vcs {
-  export PS1="\$(branch)${1:-$PS1}";
+## Add branch to PS1 (based on $PS1 or $1), formatted as $2
+function be_add_vcsprompt {
+  export GIT_PS1_SHOWDIRTYSTATE=yes
+  export PS1="\$(be_get_branch $2)${1:-$PS1}";
 }
 
-## Set PS1 to value from basic_prompt
-function ps1_basic { export PS1="$(basicprompt)"; }
-
-# Use ansi_fgseq and basicprompt to set prompt colors from names
-function ps1_colors {
-  PS1_COLOR_U=$(ansi_fgseq $1)
-  PS1_COLOR_H=$(ansi_fgseq $2)
-  PS1_COLOR_W=$(ansi_fgseq $3)
-  ps1_basic
+## Set fancy prompt, combines args to be_set_colorprompt and be_add_vcsprompt
+function be_setall_prompt {
+  be_set_colorprompt ${1:-green} ${2:-green} ${3:-blue}
+  be_add_vcsprompt "$PS1" "$4"
 }
-
-## Prepend time to PS1
-function ps1_time { export PS1="[\t] ${1:-$PS1}"; }
-
-## Prepend history number to PS1
-function ps1_hist { export PS1="[\!] ${1:-$PS1}"; }
-
-# Set termimal title from parameters
-function title { echo -ne "\033]2;$@\007"; }
-
-# Set terminal title from algorithm
-function title_long {
-  echo -ne "\033]0;${HOSTNAME%%.*}:${PWD/$HOME/~}\007";
-}
-function title_reverse {
-  local wd="${PWD/$HOME/~}";
-  local hn="${HOSTNAME%%.*}";
-  echo -ne "\033]0;${wd}:${USER:0:1}@${hn}\007";
-}
-
-# Set title from PROMPT_COMMAND
-function autotitle {
-  if [[ $TERM == @(rxvt|xterm) ]]; then
-    export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND;} ${1:-title_reverse}";
-  fi
-}
-
