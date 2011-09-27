@@ -1,6 +1,6 @@
 # FROM: http://poisonbit.wordpress.com/2010/12/22/dirname-ng-bash-is-slow-just-10-times-faster-than-c/
 #
-# cl_dirname STR1 STR2 STR3
+# dirname STR1 STR2 STR3
 #
 # Comments comes from:
 # http://www.opengroup.org/onlinepubs/000095399/utilities/dirname.html
@@ -9,7 +9,7 @@
 # STDOUT: The dirname utility shall write a line to the standard output
 # in the following format: &amp;quot;%sn&amp;quot;, &amp;lt;resulting string&amp;gt;
 #
-cl_dirname () {
+dirname () {
     local string; for string; do
 
         # If there are not slash on string, it is '.'
