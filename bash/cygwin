@@ -1,44 +1,39 @@
 [[ $(uname) == CYGWIN_NT* ]] || return
 
-########################################################
-## killall replacement
-
-function killall {
-  [ -z "$1" ] && return 
-  ps -ea | grep $1 | gawk '$1 ~ /^[^SI]/ { system("kill -9 " $1); }'
-}
-
-# Escape any spaces in LESSOPEN
-export LESSOPEN="|$(echo $HOME|sed 's/\ /\\\ /g')/.lesspipe.sh %s"
-
-########################################################
-## Share SSH agent between shells
-
-SSH_ENV="$HOME/.ssh/environment"
-
-# Function to start ssh-agent and save the envars
-function start_agent {
-     /usr/bin/ssh-agent | sed 's/^echo/#echo/' > "${SSH_ENV}"
-     chmod 600 "${SSH_ENV}"
-     . "${SSH_ENV}" > /dev/null
-}
-
-# Source SSH settings, if applicable
-if [[ -f "${SSH_ENV}" ]]; then
-     . "${SSH_ENV}" > /dev/null
-     #Note ps ${SSH_AGENT_PID} does not work under cywgin
-     ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
-         start_agent;
-     }
-else
-     start_agent;
-fi 
-	
-########################################################
-## For shell started from explorer context menu
-
-# Explorer "Cygwin shell here"
-if [[ -f /start_here ]]; then
-    cd "$(cat /start_here)" 
-    rm -f /start_here
+## Provide killall
+if ! hash killall &>/dev/null; then
+    function killall {
+        [[ -z "$1" ]] && return 
+        ps -ea | grep $1 | gawk '$1 ~ /^[^SI]/ { system("kill -9 " $1); }'
+    }
 fi
+
+## Escape spaces in LESSOPEN
+[[ -f ~/.lesspipe.sh ]] && export LESSOPEN="|$(echo $HOME|sed 's/\ /\\\ /g')/.lesspipe.sh %s"
+
+## Share SSH agent between shells
+export CYGWIN_SSH_ENV="$HOME/.ssh/environment"
+
+## Start ssh-agent and save the envars
+function cyg_start_agent {
+     /usr/bin/ssh-agent | sed 's/^echo/#echo/' > "${CYGWIN_SSH_ENV}"
+     chmod 600 "${CYGWIN_SSH_ENV}"
+     source "${CYGWIN_SSH_ENV}" > /dev/null
+}
+
+## Source SSH agent settings, starting ssh-agent if necessary 
+function cyg_ensure_agent {
+    if [[ -f "${CYGWIN_SSH_ENV}" ]]; then
+        source "${CYGWIN_SSH_ENV}" > /dev/null
+        #ps ${SSH_AGENT_PID} does not work under cywgin
+        ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || { cyg_start_agent; }
+    else
+        cyg_start_agent
+    fi 
+}
+	
+## Start context-menu shell in directory
+function cyg_startdir {
+    local sdir="/cygwin_startdir"
+    [[ -f $sdir ]] && { cd "$(cat $sdir)"; rm -f "$sdir"; }
+}
