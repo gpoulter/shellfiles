@@ -1,4 +1,5 @@
-function be_history_env {
+# Set history environment and options
+function be_set_histconf {
     # Timestamp the history entries (important!!)
     export HISTTIMEFORMAT="%Y-%m-%d %T "
 
@@ -15,28 +16,29 @@ function be_history_env {
     shopt -u histverify # Immediately execute history sub
 }
 
-## History commands
-
-# Today's history
-function ht { history | grep "$(date +%Y-%m-%d)" $@; }
-
-# Grep history
-alias h='history|grep'
-
-# Update history from other shells
-alias hu='history -n' 
+# Print today's history
+function be_histtoday { history | grep "$(date +%Y-%m-%d)" $@; }
 
 # Print last command as TIME<tab>PWD<tab>COMMAND
-function lastcmd { local H=$(history 1); H=$(echo -n ${H/+([0-9])}); echo -e "${H:0:19}\t${PWD}\t${H:20}"; }
+function be_histline { local H=$(history 1); H=$(echo -n ${H/+([0-9])}); echo -e "${H:0:19}\t${PWD}\t${H:20}"; }
 
 # Print top $1 (10) working directories, based on $2 (5000) most recent commands
-function topwds { tail -n ${2:-5000} ~/.history | cut -f 2 | sort | uniq -c | sort -n | tail -n ${1:-10}; }
+function be_topwds { tail -n ${2:-5000} ~/.history | cut -f 2 | sort | uniq -c | sort -n | tail -n ${1:-10}; }
 
 # Print top $1 (10) recent commands, examining first $2 (all) arguments, based on $3 (5000) most recent commands
-function topcmds { tail -n ${3:-5000} ~/.history | cut -f 3 | cut -d ' ' -f 1-$2 | sort | uniq -c | sort -n | tail -n ${1:-10}; }
+function be_topcmds { tail -n ${3:-5000} ~/.history | cut -f 3 | cut -d ' ' -f 1-$2 | sort | uniq -c | sort -n | tail -n ${1:-10}; }
 
 # Unified history
-function history_prompt_command { history -a; lastcmd >> ~/.history; history -n; }
+function be_histcmd { history -a; be_histline >> ~/.history; history -n; }
 
 # Append to history on displaying next prompt
-function be_history_prompt { export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND;} history_prompt_command"; }
+function be_set_histcmd { export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND;} be_histcmd"; }
+
+# Enable all history tweaks
+function be_setall_history { 
+    be_set_histconf
+    be_set_histcmd
+    alias htoday=be_histtoday
+    alias topwds=be_topwds
+    alias topcmds=be_topcmds
+}
