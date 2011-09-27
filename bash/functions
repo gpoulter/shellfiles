@@ -25,6 +25,9 @@ function be_google { curl -A Mozilla http://www.google.com/search?q=$@ | html2te
 ## Colourful 'grep' for $@ with paging
 function be_cgrep { grep --line-number --color=always "$@" | less -R; }
 
+## Run vim using sudo if necessary
+function be_vim { if test -w $1; then vim $1; else sudo vim $1; fi }
+
 ## Confirm for cp/mv/rm/crontab
 function be_careful {
     if [[ "$1" == "off" ]]; then
@@ -95,4 +98,5 @@ function be_setall_funcalias {
     alias ke=be_awkeval
     alias bce=be_bceval
     alias hless=be_hiless
+    alias vi=be_vim
 }
