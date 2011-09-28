@@ -1,5 +1,22 @@
 # -*- sh -*-
 
+## Implementation of basename in bash
+function basename {
+    # Remove trailing / characters
+    local name="$1"
+    for ((i=${#name}-1; i>0; i--)); do
+        if [[ ${name:$i:1} != '/' ]]; then break; fi;
+    done
+    name="${name::$i+1}"
+    # Remove up to final /
+    name="${name##*/}"
+    # Remove optional suffix
+    name="${name%$2}"
+    # Return / rather than empty string
+    [[ -z "$name" ]] && name="/"
+    echo "$name"
+}
+
 ## Shortcut for awk evaluation: 3+5/8, '(3+5)*2'
 function be_awkeval { awk "BEGIN{ print $* }" ;}
 function be_bceval { echo "scale=4; $*" | bc; }
