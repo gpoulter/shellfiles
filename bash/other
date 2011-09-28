@@ -20,10 +20,22 @@ function be_set_lsaliases {
 
 ## Set extra aliases
 function be_set_aliases {
-    export PAGER=less
-    export LESS='--LONG-PROMPT --RAW-CONTROL-CHARS'
+# Ack-grep
+    hash ack-grep &>/dev/null && alias a=ack-grep
+# Hilighting less
+    hash source-highlight &>/dev/null && alias hless=be_hiless
+# Awk calculator
+    alias c=be_awkeval
+# bc evaluator
+    alias bce=be_bceval
 # Pager, interpreting ascii codes
     alias p='less -R'
+# Sudo shortcut
+    alias s='sudo'
+# Vim with view read-only files
+    alias v='be_vim_view'
+# Vim with sudo read-only files
+    alias vs='be_vim_sudo'
 # What services are running here
     alias whatsopen="sudo nmap -sS -O 127.0.0.1"
 # Nice process listing
@@ -40,9 +52,9 @@ function be_set_aliases {
 function be_set_dircolors {
     if hash dircolors &>/dev/null; then
         if [[ -f "~/.dircolors" ]]; then
-            eval $(dircolors -b "~/.dircolors")
+            eval "$(dircolors -b "~/.dircolors")"
         else
-            eval $(dircolors -b)
+            eval "$(dircolors -b)"
         fi
     fi
     [[ -n "$LS_COLORS" ]] && export GREP_OPTIONS="--color=auto"
@@ -51,15 +63,17 @@ function be_set_dircolors {
 ## Display legend for LS_COLORS 
 function be_colorpreview {
    (
-       [[ "$LS_COLORS" ]] || eval $(dircolors)
-       [[ "$LS_COLORS" ]] || eval $(TERM=xterm dircolors)
+       [[ "$LS_COLORS" ]] || eval "$(dircolors)"
+       [[ "$LS_COLORS" ]] || eval "$(TERM=xterm dircolors)"
        printf "$LS_COLORS"
    ) | tr : '\n' |
    sed 's/\([^=]*\)=\(.*\)/\x1b[\2m\1\x1b[0m\t\2/'
 }
 
-## Set shell options
+## Set shell options and environment vars
 function be_set_shopts {
+    export PAGER=less
+    export LESS='--LONG-PROMPT --RAW-CONTROL-CHARS'
     export GLOBIGNORE='.:..'
     shopt -s cdspell      # Correct spelling
     shopt -s checkhash    # Look up commands
@@ -87,7 +101,7 @@ function be_set_shorttitle {
 
 # Set title on each command by calling $1
 function be_set_titlecmd {
-  if [[ $TERM == @(rxvt|xterm) ]]; then
+  if [[ "$TERM" == @(rxvt|xterm) ]]; then
     export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND;} ${1:-be_set_shorttitle}";
   fi
 }

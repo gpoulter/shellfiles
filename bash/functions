@@ -14,19 +14,44 @@ function be_bceval { echo "scale=4; $*" | bc; }
 # gp -qf<<<'123456! + 0.'
 
 ## Get a text wiki summary over DNS
-function be_wiki { dig +short txt $1.wp.dg.cx; }
+function be_wiki { dig +short txt "$1.wp.dg.cx"; }
 
 ## Make directory and change into it
-function be_mkcd { [[ -n $1 ]] && [[ -e $1 ]] || mkdir -p $1 && cd $1; }
+function be_mkcd { [[ -n "$1" ]] && [[ -e "$1" ]] || mkdir -p "$1" && cd "$1"; }
 
 ## Search Google for $@
-function be_google { curl -A Mozilla http://www.google.com/search?q=$@ | html2text -width 80; }
+function be_google { curl -A Mozilla "http://www.google.com/search?q=$*" | html2text -width 80; }
 
 ## Colourful 'grep' for $@ with paging
 function be_cgrep { grep --line-number --color=always "$@" | less -R; }
 
-## Run vim using sudo if necessary
-function be_vim { if test -w $1; then vim $1; else sudo vim $1; fi }
+## Return true if Vim could save $1
+function be_cansave {
+    if [[ -f "$1" ]]; then 
+        test -w "$1"
+    else
+        test -w "$(dirname "$(readlink -nf "$1")")"
+    fi
+    return $?
+}
+
+## Run vim using sudo on non-writeable
+function be_vim_sudo { if be_cansave "$1"; then vim "$@"; else sudo vim "$@"; fi }
+
+## Run vim using view on non-writeable
+function be_vim_view { if be_cansave "$1"; then vim "$@"; else view "$@"; fi }
+
+## Removed tilde-files found under $1
+function be_rmtilde { [[ -d "$1" ]] && find "$1" -name '*~' -print -delete; }
+
+## Quote URL parameters using Python
+function be_urlquote { python -c "import urllib; print urllib.quote_plus(\"$*\")"; }
+
+## Quote URL parameters using Python
+function be_urlunquote { python -c "import urllib; print urllib.unquote_plus(\"$*\")"; }
+
+## Learn what the commands are in a directory
+function be_learn { ls "$1" | xargs whatis | grep -v nothing | less; }
 
 ## Confirm for cp/mv/rm/crontab
 function be_careful {
@@ -42,20 +67,15 @@ function be_careful {
     fi
 }
 
-## Use hless for syntax highlighting
-if [[ -n "$LS_COLORS" ]] && [[ -x "$(type -p source-highlight)" ]]; then
-    function be_hiless() {
-        INFILE="$1"; shift
-        source-highlight --out-format=esc --style-file=$HOME/.esc.style --output=STDOUT --input="$INFILE" "$@" | less -R;
-    }
-fi
-
-## Removed tilde-files found under $1
-function be_rmtilde { [[ -d "$1" ]] && find "$1" -name '*~' -print -delete; }
+## Use source-highlight for syntax highlighting
+function be_hiless() {
+    local INFILE="$1"; shift;
+    source-highlight --out-format=esc --style-file="$HOME/.esc.style" --output=STDOUT --input="$INFILE" "$@" | less -R;
+}
 
 ## Call $@ every $1 seconds
 function be_watch {
-    local seconds=$1
+    local seconds="$1"
     shift
     while true; do
         { date '+[%Y-%m-%d %H:%M:%S]'; "$@"; echo; }
@@ -69,34 +89,18 @@ function be_ssh_vars {
         (eval echo $x=\$$x) | sed 's/=/=\"/; s/$/\"/; s/^/export /'
     done 
 }
-function be_ssh_save { be_ssh_vars > $HOME/.ssh/environ; }
-function be_ssh_restore { source $HOME/.ssh/environ; }
+function be_ssh_save { be_ssh_vars > "$HOME/.ssh/environment"; }
+function be_ssh_restore { source "$HOME/.ssh/environment"; }
 
 ## Get geographic location for IP address
 function be_geoip {
-    IP=$1; [[ -z $IP ]] && IP=$(curl -s icanhazip.com)
+    IP="$1"; [[ -z "$IP" ]] && IP="$(curl -s icanhazip.com)"
     curl -s "http://www.geody.com/geoip.php?ip=$IP" | sed '/^IP:/!d;s/<[^>][^>]*>//g'
 }
 
-## Quote URL parameters using Python
-function be_urlquote { python -c "import urllib; print urllib.quote_plus(\"$*\")"; }
-
-## Quote URL parameters using Python
-function be_urlunquote { python -c "import urllib; print urllib.unquote_plus(\"$*\")"; }
-
-## Learn what the commands are in a directory
-function be_learn { ls $1 | xargs whatis | grep -v nothing | less; }
-
 # Prints out the number of non-blank lines in the given files, with whitespace and wc counts
 function be_sloc {
-    cat $* | awk 'BEGIN { count = 0; space = 0; } { \
-        if(match($0,"[0-9a-zA-z]+")) { count++; } else { space++; } }
+    cat "$@" | awk 'BEGIN { count = 0; space = 0; } { \
+        if(match("$0","[0-9a-zA-z]+")) { count++; } else { space++; } }
         END { printf("LOC:  %d\nSPACE: %d\n",count,space); }'
-}
-
-function be_setall_funcalias {
-    alias ke=be_awkeval
-    alias bce=be_bceval
-    alias hless=be_hiless
-    alias vi=be_vim
 }

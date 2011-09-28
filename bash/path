@@ -1,26 +1,26 @@
 # -*- sh -*-
 
 ## True if $1 is inpath
-function be_inpath { echo $PATH | /bin/grep -Eq "(^|:)$1($|:)"; }
+function be_inpath { echo "$PATH" | /bin/grep -Eq "(^|:)$1($|:)"; }
 
 ## Append $1 to PATH if it exists, without duplication
-function be_addpath { be_inpath $1 || [[ -d $1 ]] && export PATH=$PATH:$1; }
+function be_addpath { be_inpath "$1" || [[ -d "$1" ]] && export PATH="$PATH:$1"; }
 
 ## Prepend $1 to PATH if it exists, without duplication
-function be_prepath { be_inpath $1 || [[ -d $1 ]] && export PATH=$1:$PATH; }
+function be_prepath { be_inpath "$1" || [[ -d "$1" ]] && export PATH="$1:$PATH"; }
 
 ## Remove $1 from PATH
 function be_rmpath {
-    export PATH=$(echo $PATH | sed -e "s=^${1}:==;s=:${1}$==;s=:${1}:=:=");
+    export PATH="$(echo $PATH | sed -e "s=^${1}:==;s=:${1}$==;s=:${1}:=:=")";
 }
 
 ## Find exectuables in PATH, grepping names for $@
 function be_greppath {
-    find ${PATH//:/ } -executable -type f -printf "%f\n" | grep "$@"
+    find "${PATH//:/ }" -executable -type f -printf "%f\n" | grep "$@"
 }
 
 ## Sort PATH, leaving only unique elements
 function be_uniqpath {
-    export PATH=$(echo $PATH | sed 's/:/\n/g' | sort -u | sed -e '1{$p;x;d;};{H;$!d;x;s/\n/:/g;b;};x;s/\n//g;${p;x;}')
+    export PATH="$(echo $PATH | sed 's/:/\n/g' | sort -u | sed -e '1{$p;x;d;};{H;$!d;x;s/\n/:/g;b;};x;s/\n//g;${p;x;}')"
 }
 

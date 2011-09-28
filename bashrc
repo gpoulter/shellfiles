@@ -33,7 +33,6 @@ function be_setall_confpaths {
 function be_setall_everything {
     be_setall_confpaths
     be_setall_other
-    be_setall_funcalias
     be_setall_history
     be_setall_prompt "$@"
 }

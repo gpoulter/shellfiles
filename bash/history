@@ -17,16 +17,16 @@ function be_set_histconf {
 }
 
 # Print today's history
-function be_histtoday { history | grep "$(date +%Y-%m-%d)" $@; }
+function be_histtoday { history | grep "$(date +%Y-%m-%d)" "$@"; }
 
 # Print last command as TIME<tab>PWD<tab>COMMAND
-function be_histline { local H=$(history 1); H=$(echo -n ${H/+([0-9])}); echo -e "${H:0:19}\t${PWD}\t${H:20}"; }
+function be_histline { local H="$(history 1)"; H="$(echo -n ${H/+([0-9])})"; echo -e "${H:0:19}\t${PWD}\t${H:20}"; }
 
 # Print top $1 (10) working directories, based on $2 (5000) most recent commands
-function be_topwds { tail -n ${2:-5000} ~/.history | cut -f 2 | sort | uniq -c | sort -n | tail -n ${1:-10}; }
+function be_topwds { tail -n "${2:-5000}" ~/.history | cut -f 2 | sort | uniq -c | sort -n | tail -n "${1:-10}"; }
 
 # Print top $1 (10) recent commands, examining first $2 (all) arguments, based on $3 (5000) most recent commands
-function be_topcmds { tail -n ${3:-5000} ~/.history | cut -f 3 | cut -d ' ' -f 1-$2 | sort | uniq -c | sort -n | tail -n ${1:-10}; }
+function be_topcmds { tail -n "${3:-5000}" ~/.history | cut -f 3 | cut -d ' ' -f 1-"$2" | sort | uniq -c | sort -n | tail -n "${1:-10}"; }
 
 # Unified history
 function be_histcmd { history -a; be_histline >> ~/.history; history -n; }
