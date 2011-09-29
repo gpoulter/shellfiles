@@ -42,9 +42,16 @@ function be_google { curl -A Mozilla "http://www.google.com/search?q=$*" | html2
 ## Colourful 'grep' for $@ with paging
 function be_cgrep { grep --line-number --color=always "$@" | less -R; }
 
+## Built-in substitute for cat
+function be_cat {
+    for x in "$@"; do
+        echo "$(< "$x")"
+    done
+}
+
 ## Return true if Vim could save $1
 function be_cansave {
-    if [[ -f "$1" ]]; then 
+    if [[ -f "$1" ]]; then
         test -w "$1"
     else
         test -w "$(dirname "$(readlink -nf "$1")")"
@@ -87,7 +94,7 @@ function be_careful {
 ## Use source-highlight for syntax highlighting
 function be_hiless() {
     local INFILE="$1"; shift;
-    source-highlight --out-format=esc --style-file="$HOME/.esc.style" --output=STDOUT --input="$INFILE" "$@" | less -R;
+    source-highlight --out-format=esc --output=STDOUT --input="$INFILE" "$@" | less -R;
 }
 
 ## Call $@ every $1 seconds
@@ -104,7 +111,7 @@ function be_watch {
 function be_ssh_vars {
     for x in SSH_CLIENT SSH_TTY SSH_AUTH_SOCK SSH_CONNECTION DISPLAY; do
         (eval echo $x=\$$x) | sed 's/=/=\"/; s/$/\"/; s/^/export /'
-    done 
+    done
 }
 function be_ssh_save { be_ssh_vars > "$HOME/.ssh/environment"; }
 function be_ssh_restore { source "$HOME/.ssh/environment"; }
