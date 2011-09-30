@@ -82,6 +82,9 @@ function be_get_branch {
 ## Add branch to PS1 (based on $PS1 or $1), formatted as $2
 function be_add_vcsprompt {
   export GIT_PS1_SHOWDIRTYSTATE=yes
+  export GIT_PS1_SHOWSTASHSTATE=yes
+  export GIT_PS1_SHOWUNTRACKEDFILES=yes
+  export GIT_PS1_SHOWUPSTREAM=yes
   export PS1="\$(be_get_branch "$2")${1:-$PS1}";
 }
 
