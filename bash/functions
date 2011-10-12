@@ -92,10 +92,41 @@ function be_careful {
 }
 
 ## Use source-highlight for syntax highlighting
-function be_hiless() {
+function be_hiless {
     local INFILE="$1"; shift;
     source-highlight --out-format=esc --output=STDOUT --input="$INFILE" "$@" | less -R;
 }
+
+## Shrink PDF $1 using GhostScript and 150DPI images
+function be_pdfshrink {
+local DPI=150
+local OUTPUT="$1"
+shift
+gs      -q -dNOPAUSE -dBATCH -dSAFER \
+        -sDEVICE=pdfwrite \
+        -dCompatibilityLevel=1.4 \
+        -dEmbedAllFonts=true \
+        -dSubsetFonts=true \
+        -dUseFlateCompression=true \
+        -dOptimize=true \
+        -dProcessColorModel=/DeviceRGB \
+        -dUseCIEColor=true \
+        -dDownsampleGrayImages=true \
+        -dGrayImageDownsampleType=/Bicubic \
+        -dGrayImageResolution=$DPI \
+        -dAutoFilterGrayImages=false \
+        -dDownsampleMonoImages=true \
+        -dMonoImageDownsampleType=/Bicubic \
+        -dMonoImageResolution=$DPI \
+        -dDownsampleColorImages=true \
+        -dColorImageDownsampleType=/Bicubic \
+        -dColorImageResolution=$DPI \
+        -dAutoFilterColorImages=false \
+        -dPDFSETTINGS=/default \
+        -sOutputFile="$OUTPUT" \
+         "$@"
+}
+
 
 ## Call $@ every $1 seconds
 function be_watch {
