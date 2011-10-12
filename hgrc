@@ -18,3 +18,9 @@ askusername = True
 
 [alias]
 h = help
+sc = showconfig
+s = status
+l = log
+b = branch
+bs = branches
+
