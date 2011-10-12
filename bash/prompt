@@ -37,9 +37,9 @@ function be_set_baseprompt { export PS1="$(be_make_prompt)"; }
 
 ## Set PS1 with colornames for user, host, workdir
 function be_set_colorprompt {
-  export BE_PS1_UCOLOR=$(be_get_ansiseq "$1")
-  export BE_PS1_HCOLOR=$(be_get_ansiseq "$2")
-  export BE_PS1_WCOLOR=$(be_get_ansiseq "$3")
+  BE_PS1_UCOLOR=$(be_get_ansiseq "$1")
+  BE_PS1_HCOLOR=$(be_get_ansiseq "$2")
+  BE_PS1_WCOLOR=$(be_get_ansiseq "$3")
   be_set_baseprompt
 }
 
@@ -81,10 +81,10 @@ function be_get_branch {
 
 ## Add branch to PS1 (based on $PS1 or $1), formatted as $2
 function be_add_vcsprompt {
-  export GIT_PS1_SHOWDIRTYSTATE=yes
-  export GIT_PS1_SHOWSTASHSTATE=yes
-  export GIT_PS1_SHOWUNTRACKEDFILES=yes
-  export GIT_PS1_SHOWUPSTREAM=yes
+  GIT_PS1_SHOWDIRTYSTATE=yes
+  GIT_PS1_SHOWSTASHSTATE=yes
+  GIT_PS1_SHOWUNTRACKEDFILES=yes
+  GIT_PS1_SHOWUPSTREAM=yes
   export PS1="\$(be_get_branch "$2")${1:-$PS1}";
 }
 

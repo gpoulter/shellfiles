@@ -7,7 +7,7 @@ function be_set_histconf {
     export HISTCONTROL="ignorespace:erasedups"
 
     # Reduce clutter in the history
-    export HISTIGNORE='&:exit:fc:history:ht:h:l:ls:ll:..:...:cd ..:cd ~:~:-'
+    export HISTIGNORE='&:exit:fc:history:l:ls:ll:..:...:cd ..:cd ~:~:-'
 
     # History options
     shopt -s histappend # Append to .bash_history on exit
