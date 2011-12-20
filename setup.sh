@@ -29,7 +29,7 @@ function install {
         fi
     done
     # Copy files that lack inclusion
-    if ! [[ -f ~/.nanorc ]] || ! diff -u ~/.nanorc $CONF/nanorc; then cp -iv $CONF/nanorc ~/.nanorc; fi
+    if ! [[ -f ~/.nanorc ]] || ! diff -u ~/.nanorc $CONF/nanorc; then ln -vs $CONF/nanorc ~/.nanorc; fi
     [[ -f ~/.vim/vimpython ]] || ln -vs $CONF/vimpython ~/.vim/vimpython
 }
 
