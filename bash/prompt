@@ -26,9 +26,9 @@ function be_make_prompt {
   [[ "$(id -u)" != 0 ]] && local p_usr="\u@"
   [[ -n "$VIMRUNTIME" ]] && local p_vim="[vim] "
   if [[ -n "$LS_COLORS" ]]; then
-    echo "${p_vim}${BE_PS1_UCOLOR}${p_usr}${BE_PS1_HCOLOR}\h:${BE_PS1_WCOLOR}\w\[\033[00m\]\\$ "
+    echo "${p_vim}${BE_PS1_UCOLOR}${p_usr}${BE_PS1_HCOLOR}\h:${BE_PS1_WCOLOR}\w\[\033[00m\]\\n\\$ "
   else
-    echo "${p_vim}${p_usr}\h:\w\\$ "
+    echo "${p_vim}${p_usr}\h:\w\\n\\$ "
   fi
 }
 
