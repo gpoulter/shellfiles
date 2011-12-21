@@ -128,13 +128,13 @@ imap <c-w>h <c-o><c-w>h
 " nmap = Normal Mode
 
 " F6 to save file
-map <F6> :w<cr>
+map <c-x>w :w<cr>
 " F7 to toggle paste mode (normal, visual, insert and command mode)
-set pastetoggle=<F7>
+set pastetoggle=<c-x>p
 " F8 to toggle wrapping
-map <F8> :set nowrap!<cr>
+map <c-x>n :set nowrap!<cr>
 " F9 to execute a subshell
-nmap <F9> :sh<cr>
+nmap <c-x>s :sh<cr>
 " Space/Backspace to page forward/back
 nmap <Space> <c-f>
 nmap <Backspace> <c-b>
