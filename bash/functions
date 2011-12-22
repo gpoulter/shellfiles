@@ -63,7 +63,7 @@ function be_cansave {
 function be_vim_sudo { if be_cansave "$1"; then vim "$@"; else sudo vim "$@"; fi }
 
 ## Run vim using view on non-writeable
-function be_vim_view { if be_cansave "$1"; then vim "$@"; else view "$@"; fi }
+function be_vim_view { if be_cansave "$1"; then vim "$@"; else vim -M "$@"; fi }
 
 ## Removed tilde-files found under $1
 function be_rmtilde { [[ -d "$1" ]] && find "$1" -name '*~' -print -delete; }

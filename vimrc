@@ -127,13 +127,14 @@ imap <c-w>h <c-o><c-w>h
 " cmap = Command-Line Mode
 " nmap = Normal Mode
 
-" F6 to save file
+" save file
 map <c-x>w :w<cr>
-" F7 to toggle paste mode (normal, visual, insert and command mode)
+map <c-x><c-w> :w<cr>
+" toggle paste mode (normal, visual, insert and command mode)
 set pastetoggle=<c-x>p
-" F8 to toggle wrapping
+" toggle wrapping
 map <c-x>n :set nowrap!<cr>
-" F9 to execute a subshell
+" execute subshell
 nmap <c-x>s :sh<cr>
 " Space/Backspace to page forward/back
 nmap <Space> <c-f>
@@ -145,3 +146,11 @@ if !exists("autocommands_loaded")
   autocmd BufRead,BufNewFile,FileReadPost *.py source $HOME/.vim/vimpython
 endif
 
+" Less CSS (uses ~/.vimrc/syntax/less.vim)
+autocmd BufNewFile,BufRead *.less set filetype=less
+
+" Compile CoffeeScript on save
+autocmd BufWritePost,FileWritePost *.coffee :silent !coffee -c <afile>
+
+" Compile LessCSS on save
+autocmd BufWritePost,FileWritePost *.less :silent !lessc <afile> <afile>:p:r.css
