@@ -149,8 +149,16 @@ endif
 " Less CSS (uses ~/.vimrc/syntax/less.vim)
 autocmd BufNewFile,BufRead *.less set filetype=less
 
-" Compile CoffeeScript on save
+" Compile CoffeeScript on save (fails silently if coffee not found)
 autocmd BufWritePost,FileWritePost *.coffee :silent !coffee -c <afile>
 
-" Compile LessCSS on save
-autocmd BufWritePost,FileWritePost *.less :silent !lessc <afile> <afile>:p:r.css
+" Compile LessCSS on save (fails silently if lessc not found)
+autocmd BufWritePost,FileWritePost *.less :silent !lessc <afile> <afile>:r.css
+
+" Single-space indent in zencoding
+let g:user_zen_settings = {
+\  'indentation' : ' '
+\}
+
+" Enable pathogen vim bundles
+call pathogen#infect()
