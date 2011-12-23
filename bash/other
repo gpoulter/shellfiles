@@ -120,12 +120,12 @@ function be_set_aliases {
 # Windows rsync
     alias rsyncw='rsync --modify-window=2 --delete-after --recursive --verbose'
 # Debian package management
-    alias ac='apt-cache ' 
-    alias acs='apt-cache search '
-    alias ag='sudo apt-get ' 
-    alias can-has='sudo apt-get install '
-    alias agi='sudo apt-get install ' 
-    alias dq='dpkg-query '
+    alias ac='apt-cache' 
+    alias acs='apt-cache search'
+    alias ag='sudo apt-get' 
+    alias can-has='sudo apt-get install'
+    alias agi='sudo apt-get install' 
+    alias dq='dpkg-query'
     be_wrap_aliases ac ag can-has agi
 }
 
