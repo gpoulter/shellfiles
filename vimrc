@@ -3,7 +3,11 @@
 " ****************************************************************************
 " Program Behaviour
 " ****************************************************************************
+" http://jmcpherson.org/vimrc.html 
+" http://code.google.com/p/fizz-buzz/source/browse/trunk/misc/home_directory/.vimrc
 
+" Enable syntax highlighting
+syntax on
 " disable vi-compatibility
 set nocompatible
 " files to ignore
@@ -11,30 +15,17 @@ set wildignore=*.o,*.lo,*.la,#*#,.*.rej,*.rej,.*~,*~,.#*,*.class,*.pyc
 " disable backup files
 set nobackup
 set nowritebackup
-
-" Jump to last position when re-opening a file
-if has("autocmd")
-  au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
-endif
-
-" ****************************************************************************
-" Visual Behaviour/Appearance
-" ****************************************************************************
-
-" http://jmcpherson.org/vimrc.html 
-" http://code.google.com/p/fizz-buzz/source/browse/trunk/misc/home_directory/.vimrc
-
-" turn off annoying GUI toolbar
+" turn off GUI toolbar
 set guioptions-=T
-" highlight search
+" highlight search terms
 set nohlsearch
 " ignore case for searching
 set ignorecase
 " default to incremental search with /
 set incsearch
-" enable mouse
+" enable mouse (disables terminal copy in non-gui vim)
 set mouse=a
-" show a ruler
+" show ruler
 set ruler
 " only ignore case if search is all lower case
 set smartcase
@@ -44,7 +35,7 @@ set showcmd
 set showmatch
 " show me when I'm doing something
 set showmode
-" turn off annoying beets
+" turn off beeps
 set vb t_vb=
 " enhanced command-line completion
 set wildmenu
@@ -52,10 +43,11 @@ set wildmenu
 " ****************************************************************************
 " Indentation and wrapping
 " ****************************************************************************
-
 " http://vim.wikia.com/wiki/Indenting_source_code
 " Use :le2 to left-align the selected block of text in column 2
 
+" Indent plugin files
+filetype plugin indent on
 " maintain indentation level on new line
 set autoindent
 " sensible backspace operation
@@ -72,13 +64,10 @@ set shiftwidth=4
 set smartindent
 " number spaces inserted with <TAB>
 set softtabstop=4
-
-" disable #-comments going to column 0 (preprocessor indent)
+" prevent # comments going to column 0 like a C preprocessor
 inoremap # X<BS>#
 set cinkeys-=0#
 set indentkeys-=0#
-" Python smartindent settings
-autocmd BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class,with
 
 " ****************************************************************************
 " Insert Mode Mappings
@@ -123,9 +112,7 @@ imap <c-w>h <c-o><c-w>h
 " Normal and Visual mode mappings
 " ****************************************************************************
 " map = Normal Mode and Visual Modes
-" imap = Insert Mode
-" cmap = Command-Line Mode
-" nmap = Normal Mode
+" imap = Insert Mode, cmap = Command-Line Mode, nmap = Normal Mode
 
 " save file
 map <c-x>w :w<cr>
@@ -134,17 +121,19 @@ map <c-x><c-w> :w<cr>
 set pastetoggle=<c-x>p
 " toggle wrapping
 map <c-x>n :set nowrap!<cr>
-" execute subshell
-nmap <c-x>s :sh<cr>
-" Space/Backspace to page forward/back
-nmap <Space> <c-f>
-nmap <Backspace> <c-b>
+
+" ****************************************************************************
+" Auto Commands
+" ****************************************************************************
 
 " Python setup
-if !exists("autocommands_loaded")
-  let autocommands_loaded = 1
+if !exists("py_autocommands_loaded")
+  let py_autocommands_loaded = 1
   autocmd BufRead,BufNewFile,FileReadPost *.py source $HOME/.vim/vimpython
 endif
+
+" Python smartindent settings
+autocmd BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class,with
 
 " Less CSS (uses ~/.vimrc/syntax/less.vim)
 autocmd BufNewFile,BufRead *.less set filetype=less
@@ -155,10 +144,11 @@ autocmd BufWritePost,FileWritePost *.coffee :silent !coffee -c <afile>
 " Compile LessCSS on save (fails silently if lessc not found)
 autocmd BufWritePost,FileWritePost *.less :silent !lessc <afile> <afile>:r.css
 
+" Jump to last position when re-opening a file
+autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+
 " Single-space indent in zencoding
 let g:user_zen_settings = {
 \  'indentation' : ' '
 \}
 
-" Enable pathogen vim bundles
-call pathogen#infect()
