@@ -51,10 +51,10 @@ function be_cat {
 
 ## Return true if Vim could save $1
 function be_cansave {
-    if [[ -f "$1" ]]; then
+    if [[ -f "$1" ]] || [[ -z "$1" ]]; then
         test -w "$1"
     else
-        test -w "$(dirname "$(readlink -nf "$1")")"
+        test -w "$(dirname "$(readlink -nm "$1")")"
     fi
     return $?
 }

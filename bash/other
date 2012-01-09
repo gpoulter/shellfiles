@@ -100,9 +100,7 @@ function be_set_aliases {
 # bc evaluator
     alias bce=be_bceval
 # Pager, interpreting ascii codes
-    alias p='less -R'
-# Sudo shortcut
-    alias s='sudo'
+    alias pg='less -R'
 # Vim with view read-only files
     alias v='be_vim_view'
 # Vim with sudo read-only files
