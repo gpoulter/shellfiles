@@ -19,7 +19,7 @@ set nowritebackup
 set guioptions-=T
 " highlight search terms
 set nohlsearch
-" ignore case for searching
+" ic: ignore case for searching
 set ignorecase
 " default to incremental search with /
 set incsearch
@@ -27,13 +27,13 @@ set incsearch
 set mouse=a
 " show ruler
 set ruler
-" only ignore case if search is all lower case
+" scs: only ignore case if search is all lower case
 set smartcase
 " show what is being done
 set showcmd
-" briefly show matching parenthesis
+" sm: briefly show matching parenthesis
 set showmatch
-" show me when I'm doing something
+" smd: show me when I'm doing something
 set showmode
 " turn off beeps
 set vb t_vb=
@@ -46,24 +46,28 @@ set wildmenu
 " http://vim.wikia.com/wiki/Indenting_source_code
 " Use :le2 to left-align the selected block of text in column 2
 
-" Indent plugin files
+" ft: Indent plugin files
 filetype plugin indent on
-" maintain indentation level on new line
+" ai: maintain indentation level on new line
 set autoindent
-" sensible backspace operation
+" bs: sensible backspace operation
 set backspace=indent,eol,start
-" insert spaces when pressing <TAB>
+" et: insert softtabstop spaces when pressing <TAB>
 set expandtab
-" turn off line wrapping by default
+" nw: turn off line wrapping by default
 set nowrap
-" only indent to nearest tab stop
+" sr: only indent to nearest tab stop
 set shiftround
-" number of spaces for << >> ===
-set shiftwidth=4
-" insert extra indentation in C-style blocks
+" si: insert extra indentation in C-style blocks
 set smartindent
-" number spaces inserted with <TAB>
+" sw: number of spaces for << >> ===
+set shiftwidth=4
+" ts: width of <TAB> character
+set tabstop=4
+" sts: number spaces inserted with <TAB>
 set softtabstop=4
+" tw: line wrapping width
+set textwidth=30000
 " prevent # comments going to column 0 like a C preprocessor
 inoremap # X<BS>#
 set cinkeys-=0#
@@ -137,6 +141,9 @@ autocmd BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,
 
 " Less CSS (uses ~/.vimrc/syntax/less.vim)
 autocmd BufNewFile,BufRead *.less set filetype=less
+
+" HTML indent settings
+autocmd BufRead *.html set softtabstop=1 tabstop=1 shiftwidth=1
 
 " Compile CoffeeScript on save (fails silently if coffee not found)
 autocmd BufWritePost,FileWritePost *.coffee :silent !coffee -c <afile>
