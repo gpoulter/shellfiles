@@ -29,14 +29,14 @@ function be_uniqpath {
 # The current directory is at the top of the stack.
 #
 function be_stack_cd {
-    if [ $1 ]; then
+    if [[ -n "$1" ]]; then
         # use the pushd bash command to push the directory
         # to the top of the stack, and enter that directory
         pushd "$1"
     else
         # the normal cd behavior is to enter $HOME if no
         # arguments are specified
-        pushd $HOME 
+        pushd "$HOME"
     fi
 }
 # Promt the user for an entry.

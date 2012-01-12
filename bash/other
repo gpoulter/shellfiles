@@ -92,7 +92,7 @@ function be_set_lsaliases {
 ## Set extra aliases
 function be_set_aliases {
 # Ack-grep
-    hash ack-grep &>/dev/null && alias a=ack-grep
+    hash ack-grep &>/dev/null && alias a=ack-grep && alias ack=ack-grep
 # Hilighting less
     hash source-highlight &>/dev/null && alias hless=be_hiless
 # Awk calculator
