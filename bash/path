@@ -16,7 +16,7 @@ function be_rmpath {
 
 ## Find exectuables in PATH, grepping names for $@
 function be_greppath {
-    find "${PATH//:/ }" -executable -type f -printf "%f\n" | grep "$@"
+    find ${PATH//:/ } -executable -type f | grep "$@"
 }
 
 ## Sort PATH, leaving only unique elements
@@ -24,21 +24,6 @@ function be_uniqpath {
     export PATH="$(echo $PATH | sed 's/:/\n/g' | sort -u | sed -e '1{$p;x;d;};{H;$!d;x;s/\n/:/g;b;};x;s/\n//g;${p;x;}')"
 }
 
-# From http://aijazansari.com/2010/02/20/navigating-the-directory-stack-in-bash/
-# An enhanced 'cd' - push directories onto a stack as you navigate to it.
-# The current directory is at the top of the stack.
-#
-function be_stack_cd {
-    if [[ -n "$1" ]]; then
-        # use the pushd bash command to push the directory
-        # to the top of the stack, and enter that directory
-        pushd "$1"
-    else
-        # the normal cd behavior is to enter $HOME if no
-        # arguments are specified
-        pushd "$HOME"
-    fi
-}
 # Promt the user for an entry.
 # If the user enters 'p', pop the stack.
 # If the user enters a number, move that
@@ -60,6 +45,5 @@ function be_stack_select {
 function be_setall_stack {
     alias s=pushd
     alias p=popd
-    alias cd=be_stack_cd
     alias d=be_stack_select
 }
