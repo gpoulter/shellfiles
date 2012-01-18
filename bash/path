@@ -32,18 +32,24 @@ function be_uniqpath {
 #
 function be_stack_select {
     dirs -v
+    echo " p  push current"
+    echo " q  do nothing" 
     echo -n "#: "
     read dir
     if [[ $dir = 'p' ]]; then
         pushd > /dev/null
-    elif [[ $dir != 'q' ]]; then
+    elif [[ $dir != 'q' && ! -z "$dir" ]]; then
         d=$(dirs -l +$dir);
         popd +$dir > /dev/null
         pushd "$d" > /dev/null
     fi
 }
+function be_stack_cd {
+    cd "$@" && pushd .
+}
 function be_setall_stack {
-    alias s=pushd
+    alias s='pushd .'
     alias p=popd
+    alias pcd=be_stack_cd
     alias d=be_stack_select
 }
