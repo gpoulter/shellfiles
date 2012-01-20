@@ -44,12 +44,9 @@ function be_stack_select {
         pushd "$d" > /dev/null
     fi
 }
-function be_stack_cd {
-    cd "$@" && pushd .
-}
 function be_setall_stack {
-    alias s='pushd .'
+    alias s=pushd
     alias p=popd
-    alias pcd=be_stack_cd
     alias d=be_stack_select
+    alias dv='dirs -v'
 }
