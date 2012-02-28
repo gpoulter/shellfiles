@@ -2,68 +2,50 @@
 
 #############################################
 # Behaviour
-#############################################
+
+## Use ctrl-n for escape
+#escape ^nn
 
 ## Don't "log in" new windows by default
 deflogin off
 ## Autodetach on hangup
 autodetach on
 ## Non-blocking copes better with flaky ssh connections
-defnonblock 5
-## Scroll with Shift-PageUp/PageDown (byobu has Alt-PageUp/Down)
-#termcapinfo xterm ti@:te@
-
-#############################################
-# Appearance
-#############################################
+defnonblock 3
 
 ## Don't use visual bell
-vbell off
-vbell_msg "Ding!"
+#vbell off
+#vbell_msg "Ding!"
 ## Don't show startup message
-startup_message off
+#startup_message off
 ## Lots of scrollback lines
-defscrollback 8192
-
+#defscrollback 8192
 ## Don't send screen messages
 #hardstatus off
 ## Logout message
 #pow_detach_msg "Screen session of \$LOGNAME \$:cr:\$:nl:ended."
 ## Set caption with date|load|windows
 #caption always "%{Yb} %D %Y-%02m-%02d %0c %{k}|%{G} %l %{k}|%{W} %-w%{G}%n %t%{W}%+w"
+## Scroll with Shift-PageUp/PageDown (byobu has Alt-PageUp/Down)
+#termcapinfo xterm ti@:te@
 
 #############################################
-# Convenience Bindings
-#############################################
+# Unbind dangerous operations
 
-## Default escape is ^Aa (ctrl-a)
-## Use ctrl-o for escape
-#escape ^Oo
-## Use ` (grave) for escape
-#escape ``
-## Use ctrl-n for escape
-escape ^nn
-
-## Resizing bindings for split screen
-bind = resize =
-bind + resize +1
-bind - resize -1
-bind _ resize max
-
-#############################################
-# Safety Bindings
-#############################################
-
-## Unbind dangerous operations
 bind .   # was write termcap
 bind ^\  # was killall (and) quit
 bind ^k  # was kill
 bind k   # was kill
+bind "^X" # ^x was lockscreen
 bind x   # was lockscreen
-bind ^X  # was lockscreen
 bind F12 # was lockscreen for byobu
 
-## Safer bindings for dangerous operations
-bind K kill
-bind \\ quit
+#############################################
+# Convenience Bindings
+
+## Resizing bindings for split screen
+#bind = resize =
+#bind + resize +1
+#bind - resize -1
+#bind _ resize max
 
