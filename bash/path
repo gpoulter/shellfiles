@@ -48,5 +48,6 @@ function be_setall_stack {
     alias s=pushd
     alias p=popd
     alias d=be_stack_select
+    alias dl='dirs -l'
     alias dv='dirs -v'
 }
