@@ -1,46 +1,50 @@
 # Get this config with "source ~/.conf/screenrc"
 
 #############################################
-# Behaviours
+# Behaviour
 #############################################
 
-# don't "log in" new windows by default
+## Don't "log in" new windows by default
 deflogin off
-# Whether to autodetach on hangup
+## Autodetach on hangup
 autodetach on
-# Enable non-blocking mode to better cope with flaky ssh connections.
+## Non-blocking copes better with flaky ssh connections
 defnonblock 5
+## Scroll with Shift-PageUp/PageDown (byobu has Alt-PageUp/Down)
+#termcapinfo xterm ti@:te@
 
 #############################################
 # Appearance
 #############################################
 
-# don't use visual bell
+## Don't use visual bell
 vbell off
 vbell_msg "Ding!"
-# don't show startup message
+## Don't show startup message
 startup_message off
-# logout message
-pow_detach_msg "Screen session of \$LOGNAME \$:cr:\$:nl:ended."
-# turn sending of screen messages to hardstatus off
-hardstatus off
-# lots of scrollback lines
+## Lots of scrollback lines
 defscrollback 8192
-# set caption with date|load|windows
-caption always "%{Yb} %D %Y-%02m-%02d %0c %{k}|%{G} %l %{k}|%{W} %-w%{G}%n %t%{W}%+w"
+
+## Don't send screen messages
+#hardstatus off
+## Logout message
+#pow_detach_msg "Screen session of \$LOGNAME \$:cr:\$:nl:ended."
+## Set caption with date|load|windows
+#caption always "%{Yb} %D %Y-%02m-%02d %0c %{k}|%{G} %l %{k}|%{W} %-w%{G}%n %t%{W}%+w"
 
 #############################################
 # Convenience Bindings
 #############################################
 
-# Use ctrl-o for escape (default ctrl-A)
+## Default escape is ^Aa (ctrl-a)
+## Use ctrl-o for escape
 #escape ^Oo
-# Use ` (grave) for escape
+## Use ` (grave) for escape
 #escape ``
-# Use ctrl-n for escape
+## Use ctrl-n for escape
 escape ^nn
 
-# Resizing bindings for split screen
+## Resizing bindings for split screen
 bind = resize =
 bind + resize +1
 bind - resize -1
@@ -50,18 +54,16 @@ bind _ resize max
 # Safety Bindings
 #############################################
 
-# Get rid of dangerous keybindings
+## Unbind dangerous operations
 bind .   # was write termcap
 bind ^\  # was killall (and) quit
 bind ^k  # was kill
 bind k   # was kill
 bind x   # was lockscreen
 bind ^X  # was lockscreen
-bind F12 # was lockscreen
+bind F12 # was lockscreen for byobu
 
-# Make them better
+## Safer bindings for dangerous operations
 bind K kill
-bind I login on
-bind O login off
 bind \\ quit
 
