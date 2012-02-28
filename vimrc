@@ -148,6 +148,9 @@ autocmd BufRead *.html set softtabstop=1 tabstop=1 shiftwidth=1
 " CoffeeScript indent settings
 autocmd BufRead *.coffee set softtabstop=4 tabstop=4 shiftwidth=4
 
+" CoffeeScript indent settings
+autocmd BufRead *.markdown set softtabstop=4 tabstop=4 shiftwidth=4
+
 " Compile CoffeeScript on save (fails silently if coffee not found)
 autocmd BufWritePost,FileWritePost *.coffee :silent !coffee -c <afile>
 
