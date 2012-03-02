@@ -5,7 +5,6 @@ CONF="$(dirname $(readlink -f $BASH_SOURCE))"
 # Configure main config files to reference these ones
 declare -A configs
 configs['.bashrc']='source ~/.local/etc/bashrc'
-configs['.tmux.conf']='source-file ~/.local/etc/tmux.conf'
 configs['.screenrc']='source ~/.local/etc/screenrc'
 configs['.inputrc']='$include ~/.local/etc/inputrc'
 configs['.hgrc']='%include ~/.local/etc/hgrc'
