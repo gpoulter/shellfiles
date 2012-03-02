@@ -8,7 +8,6 @@ configs['.bashrc']='source ~/.local/etc/bashrc'
 configs['.tmux.conf']='source-file ~/.local/etc/tmux.conf'
 configs['.screenrc']='source ~/.local/etc/screenrc'
 configs['.inputrc']='$include ~/.local/etc/inputrc'
-configs['.vimrc']='source ~/.local/etc/vimrc'
 configs['.hgrc']='%include ~/.local/etc/hgrc'
 
 # Insert the includes on line 1 of the file
@@ -30,7 +29,6 @@ function install {
     done
     # Copy files that lack inclusion
     if ! [[ -e ~/.nanorc ]] || ! diff -u ~/.nanorc $CONF/nanorc; then ln -vs $CONF/nanorc ~/.nanorc; fi
-    [[ -e ~/.vim ]] || ln -vs $CONF/vim ~/.vim
 }
 
 # Remove the includes
@@ -44,7 +42,6 @@ function uninstall {
         fi
     done
     [[ -e ~/.nanorc ]] && diff -q ~/.nanorc $CONF/nanorc && rm -v ~/.nanorc
-    [[ -L ~/.vim ]] && rm -v ~/.vim
 }
 
 $1
