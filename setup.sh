@@ -26,8 +26,12 @@ function install {
             fi
         fi
     done
-    # Copy files that lack inclusion
-    if ! [[ -e ~/.nanorc ]] || ! diff -u ~/.nanorc $CONF/nanorc; then ln -vs $CONF/nanorc ~/.nanorc; fi
+    # Link files that lack inclusion
+    for rc in nanorc pylintrc; do
+        if ! [[ -e ~/.$rc ]] || ! diff -u ~/.$rc $CONF/$rc; then
+            ln -vs $CONF/$rc ~/.$rc
+        fi
+    done
 }
 
 # Remove the includes
@@ -40,7 +44,9 @@ function uninstall {
             [[ -s ~/$file ]] || rm -v ~/$file
         fi
     done
-    [[ -e ~/.nanorc ]] && diff -q ~/.nanorc $CONF/nanorc && rm -v ~/.nanorc
+    for rc in nanorc pylintrc; do
+        [[ -e ~/.$rc ]] && diff -q ~/.$rc $CONF/$rc && rm -v ~/.$rc
+    done
 }
 
 $1
