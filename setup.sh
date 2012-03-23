@@ -4,10 +4,10 @@ CONF="$(dirname $(readlink -f $BASH_SOURCE))"
 
 # Configure main config files to reference these ones
 declare -A configs
-configs['.bashrc']='source ~/.local/etc/bashrc'
-configs['.screenrc']='source ~/.local/etc/screenrc'
-configs['.inputrc']='$include ~/.local/etc/inputrc'
-configs['.hgrc']='%include ~/.local/etc/hgrc'
+configs['.bashrc']="source $CONF"
+configs['.screenrc']="source $CONF"
+configs['.inputrc']="\$include $CONF"
+configs['.hgrc']="%include $CONF"
 
 # Insert the includes on line 1 of the file
 function install {
@@ -49,4 +49,6 @@ function uninstall {
     done
 }
 
-$1
+FUNC=install
+[[ -n $1 ]] && FUNC=$1
+$FUNC
