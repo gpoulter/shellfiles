@@ -1,13 +1,16 @@
 #!/bin/bash
 
-CONF="$(dirname $(readlink -f $BASH_SOURCE))"
+ACONF="$(dirname $(readlink -f $BASH_SOURCE))"
+RCONF="${ACONF##$HOME/}"
+echo $ACONF
+echo $RCONF
 
 # Configure main config files to reference these ones
 declare -A configs
-configs['.bashrc']="source $CONF"
-configs['.screenrc']="source $CONF"
-configs['.inputrc']="\$include $CONF"
-configs['.hgrc']="%include $CONF"
+configs['.bashrc']="source ~/$RCONF/bashrc"
+configs['.screenrc']="source ~/$RCONF/screenrc"
+configs['.inputrc']="\$include ~/$RCONF/inputrc"
+configs['.hgrc']="%include ~/$RCONF/hgrc"
 
 # Insert the includes on line 1 of the file
 function install {
@@ -28,8 +31,8 @@ function install {
     done
     # Link files that lack inclusion
     for rc in nanorc pylintrc; do
-        if ! [[ -e ~/.$rc ]] || ! diff -u ~/.$rc $CONF/$rc; then
-            ln -vs $CONF/$rc ~/.$rc
+        if ! [[ -e ~/.$rc ]] || ! diff -u ~/.$rc $ACONF/$rc; then
+            ln -vs $RCONF/$rc ~/.$rc
         fi
     done
 }
@@ -45,10 +48,12 @@ function uninstall {
         fi
     done
     for rc in nanorc pylintrc; do
-        [[ -e ~/.$rc ]] && diff -q ~/.$rc $CONF/$rc && rm -v ~/.$rc
+        [[ -e ~/.$rc ]] && diff -q ~/.$rc $ACONF/$rc && rm -v ~/.$rc
     done
 }
 
 FUNC=install
 [[ -n $1 ]] && FUNC=$1
 $FUNC
+
+# vim:set ts=4:sts=4:sw=4:
