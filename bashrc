@@ -6,6 +6,7 @@
 ## Load definitions (do nothing, except for cygwin)
 export BE_CONFDIR="$(dirname $(readlink -f $BASH_SOURCE))"
 source "$BE_CONFDIR/bash/dirname"
+source "$BE_CONFDIR/bash/completion"
 source "$BE_CONFDIR/bash/path"
 source "$BE_CONFDIR/bash/history"
 source "$BE_CONFDIR/bash/functions"
@@ -31,6 +32,7 @@ function be_setall_confpaths {
 }
 
 function be_setall_everything {
+    be_complete_fab
     be_setall_confpaths
     be_setall_other
     be_setall_stack
