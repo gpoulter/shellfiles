@@ -34,11 +34,13 @@ load-plugins=
 # can either give multiple identifier separated by comma (,) or put this option
 # multiple time (only on the command line, not in the configuration file where
 # it should appear only once).
-disable=W0511,W0404,R0801,I0011
+disable=W0511,W0404,R0801,I0011,W0142
 
 # W0511: Warning for FIXME/TODO
 # W0404: Reimport module
 # R0801: Similar lines
+# I0011: Local disabling
+# W0142: * or ** magic
 
 
 [REPORTS]
