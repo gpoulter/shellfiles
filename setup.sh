@@ -2,8 +2,6 @@
 
 ACONF="$(dirname $(readlink -f $BASH_SOURCE))"
 RCONF="${ACONF##$HOME/}"
-echo $ACONF
-echo $RCONF
 
 # Configure main config files to reference these ones
 declare -A configs
