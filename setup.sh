@@ -21,13 +21,8 @@ function install {
             echo "echo $val > $file"
             echo $val > $file
         elif ! grep -q "$val" $file; then
-            if [[ "$file" != '.bashrc' ]]; then
-                echo "sed -i "1i $val" $file"
-                sed -i "1i $val" $file
-            else
-                echo "echo $val >> $file"
-                echo $val >> $file
-            fi
+            echo "sed -i "1i $val" $file"
+            sed -i "1i $val" $file
         fi
     done
     # Link files that lack inclusion
