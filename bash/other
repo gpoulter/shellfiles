@@ -2,8 +2,8 @@
 # $1: The name of the alias
 # $2: The command used in the alias
 # $3: The arguments in the alias all in one string
-# Generate a wrapper completion function (completer) for an alias based on the command 
-# and the given arguments, if there is a completer for the command, and 
+# Generate a wrapper completion function (completer) for an alias based on the command
+# and the given arguments, if there is a completer for the command, and
 # set the wrapper as the completer for the alias.
 # http://stackoverflow.com/questions/342969/how-do-i-get-bash-completion-to-work-with-aliases
 function be_wrap_alias() {
@@ -62,7 +62,7 @@ function ${wrapper_name}() {
 
 # For each specified alias, call wrap_alias.
 function be_wrap_aliases {
-   for cmdname in "$@"; do 
+   for cmdname in "$@"; do
       cmdname="$(alias $cmdname | sed 's/sudo //')"
       eval "$(echo $cmdname | sed -e 's/alias \([^=][^=]*\)='\''\([^ ][^ ]*\) *\(.*\)'\''/be_wrap_alias \1 \2 '\''\3'\'' /')"
    done
@@ -81,7 +81,7 @@ function be_set_lsaliases {
     alias llr='ls -alR'    # long:all:recursive
     alias l.='ls -ldF .*'  # long:dotfiles
     alias ly='ls -dl -- */'  # long:directories
-    #be_wrap_aliases ll la l lr l1 lu lt llr 
+    #be_wrap_aliases ll la l lr l1 lu lt llr
     alias ..="cd .."
     alias ...="cd ../.."
     alias ....="cd ../../.."
@@ -118,16 +118,16 @@ function be_set_aliases {
 # Windows rsync
     alias rsyncw='rsync --modify-window=2 --delete-after --recursive --verbose'
 # Debian package management
-    alias ac='apt-cache' 
+    alias ac='apt-cache'
     alias acs='apt-cache search'
-    alias ag='sudo apt-get' 
+    alias ag='sudo apt-get'
     alias can-has='sudo apt-get install'
-    alias agi='sudo apt-get install' 
+    alias agi='sudo apt-get install'
     alias dq='dpkg-query'
     be_wrap_aliases ac ag can-has agi
 }
 
-## Set colors for directory listing 
+## Set colors for directory listing
 function be_set_dircolors {
     if hash dircolors &>/dev/null; then
         if [[ -f "~/.dircolors" ]]; then
@@ -139,7 +139,7 @@ function be_set_dircolors {
     [[ -n "$LS_COLORS" ]] && export GREP_OPTIONS="--color=auto"
 }
 
-## Display legend for LS_COLORS 
+## Display legend for LS_COLORS
 function be_colorpreview {
    (
        [[ "$LS_COLORS" ]] || eval "$(dircolors)"
@@ -161,17 +161,24 @@ function be_set_shopts {
     shopt -u dotglob      # Do not include .config files in normal glob
     shopt -u failglob     # Don't fail on nomatch, just leave the *'s in
     shopt -u nullglob     # Don't go to null on nomatch, just leave the *'s in
+
+    # helpers for vi editing mode
+    bind -m vi-insert "\C-l":clear-screen
+    # ^p check for partial match in history
+    bind -m vi-insert "\C-p":dynamic-complete-history
+    # ^n cycle through the list of partial matches
+    bind -m vi-insert "\C-n":menu-complete
 }
 
 # Set terminal title to $@
 function be_set_title { echo -ne "\033]2;$@\007"; }
 
-# Set long terminal title 
+# Set long terminal title
 function be_set_longtitle {
   echo -ne "\033]0;${HOSTNAME%%.*}:${PWD/$HOME/~}\007";
 }
 
-# Set short terminal title 
+# Set short terminal title
 function be_set_shorttitle {
   local wd="${PWD/$HOME/~}";
   local hn="${HOSTNAME%%.*}";
